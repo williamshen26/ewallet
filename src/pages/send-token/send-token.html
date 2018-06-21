@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Send {{symbol}}</ion-title>
+  </ion-navbar>
+
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div class="success growl" *ngIf="isSuccessful">
+    <div class="growl-icon">
+      <fa class="state-icon" [name]="'check'"></fa>
+    </div>
+    <div class="growl-content">
+      <div class="growl-title">
+        Token sent successfully.
+      </div>
+      <div class="growl-message">
+        {{receipt}}
+        <fa [name]="'copy'" (click)="copyHash()"></fa>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-item">
+    <wa-input
+      [id]="'to'"
+      [name]="'to'"
+      [label]="'To'"
+      [type]="['qr', 'list']"
+      [control]="tokenTransactionForm.controls['to']"
+      (onShowList)="showContactList()" >
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <wa-input
+      [id]="'amount'"
+      [name]="'amount'"
+      [label]="'Amount'"
+      [type]="'number'"
+      [control]="tokenTransactionForm.controls['amount']" >
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <wa-input
+      [id]="'gas'"
+      [name]="'gas'"
+      [label]="'Gas (click icon to estimate)'"
+      [type]="'gas'"
+      [control]="tokenTransactionForm.controls['gas']"
+      (estimateGas)="getEstimatedGas()" >
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <button mat-raised-button class="wallet-button" color="primary" (click)="sendToken()" [disabled]="tokenTransactionForm.invalid || isLoading">Send Token</button>
+  </div>
+</ion-content>

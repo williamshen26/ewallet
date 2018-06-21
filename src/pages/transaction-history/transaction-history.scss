@@ -1,0 +1,54 @@
+transaction-history {
+  div.list {
+    max-height: 1000px;
+    overflow: auto;
+  }
+
+  @media (max-height: 1000px) {
+    div.list {
+      max-height: 750px;
+    }
+  }
+
+  @media (max-height: 900px) {
+    div.list {
+      max-height: 650px;
+    }
+  }
+
+  @media (max-height: 800px) {
+    div.list {
+      max-height: 550px;
+    }
+  }
+
+  @media (max-height: 700px) {
+    div.list {
+      max-height: 450px;
+    }
+  }
+
+  @media (max-height: 600px) {
+    div.list {
+      max-height: 350px;
+    }
+  }
+
+  @media (max-height: 500px) {
+    div.list {
+      max-height: 250px;
+    }
+  }
+
+  @media (max-height: 400px) {
+    div.list {
+      max-height: 150px;
+    }
+  }
+
+  @media (max-height: 300px) {
+    div.list {
+      max-height: 50px;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+<div class="dialog-scroll">
+  <mat-list>
+    <h3 mat-subheader>Wallets</h3>
+    <mat-list-item *ngFor="let wallet of wallets" (click)="retrieveAddress(wallet.address)">
+      <fa mat-list-icon [name]="'address-card'"></fa>
+      <h4 mat-line>{{wallet.name}}</h4>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <h3 mat-subheader>Contacts</h3>
+    <mat-list-item *ngFor="let contact of contacts" (click)="retrieveAddress(contact.address)">
+      <fa mat-list-icon [name]="'address-card'"></fa>
+      <h4 mat-line>{{contact.name}}</h4>
+    </mat-list-item>
+  </mat-list>
+</div>
+
+<button mat-raised-button class="wallet-button" color="primary" (click)="onNoClick()">Close Dialog</button>

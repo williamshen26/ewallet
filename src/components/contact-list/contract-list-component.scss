@@ -1,0 +1,58 @@
+contact-list {
+  .dialog-scroll {
+    height: 1000px;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  @media (max-height: 1000px) {
+    .dialog-scroll {
+      height: 800px;
+    }
+  }
+
+  @media (max-height: 900px) {
+    .dialog-scroll {
+      height: 700px;
+    }
+  }
+
+  @media (max-height: 800px) {
+    .dialog-scroll {
+      height: 600px;
+    }
+  }
+
+  @media (max-height: 700px) {
+    .dialog-scroll {
+      height: 500px;
+    }
+  }
+
+  @media (max-height: 600px) {
+    .dialog-scroll {
+      height: 400px;
+    }
+  }
+
+  @media (max-height: 500px) {
+    .dialog-scroll {
+      height: 300px;
+    }
+  }
+
+  @media (max-height: 400px) {
+    .dialog-scroll {
+      height: 200px;
+    }
+  }
+
+  @media (max-height: 300px) {
+    .dialog-scroll {
+      height: 100px;
+    }
+  }
+
+
+}

@@ -1,0 +1,9 @@
+<ng-container
+  [ngSwitch]="status">
+
+  <span *ngSwitchCase="'pending'">
+     <fa [name]="'spinner'" class="wa-spinner"></fa>
+  </span>
+
+  <span *ngSwitchCase="'active'">{{data}}</span>
+</ng-container>

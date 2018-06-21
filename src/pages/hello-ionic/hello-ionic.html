@@ -3,23 +3,139 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Hello Ionic</ion-title>
+    <ion-title>Home</ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
+<ion-content no-padding>
 
-  <h3>Welcome to your first Ionic app!</h3>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <fa [name]="'plus-square'"></fa>
+          Add Wallet
+        </mat-panel-title>
+        <!--<mat-panel-description>-->
+        <!--Type your name and age-->
+        <!--</mat-panel-description>-->
+      </mat-expansion-panel-header>
 
-  <p>
-    This starter project is our way of helping you get a functional app running in record time.
-  </p>
-  <p>
-    Follow along on the tutorial section of the Ionic docs!
-  </p>
-  <p>
-    <button ion-button color="primary" menuToggle>Toggle Menu</button>
-  </p>
+      <div class="form-item">
+        <wa-input
+          [id]="'walletName'"
+          [name]="'walletName'"
+          [label]="'Wallet Name'"
+          [type]="'text'"
+          [control]="walletForm.controls['name']" >
+        </wa-input>
+      </div>
+
+      <div class="form-item">
+        <wa-input
+          [id]="'privateKey'"
+          [name]="'privateKey'"
+          [label]="'Private Key'"
+          [type]="'qr'"
+          [control]="walletForm.controls['privateKey']" >
+        </wa-input>
+      </div>
+
+      <div class="form-item">
+        <button mat-raised-button class="wallet-button" color="primary" (click)="createWallet($event)" [disabled]="walletForm.invalid">Create Wallet</button>
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-accordion>
+    <mat-expansion-panel #addContactAccordion>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <fa [name]="'plus-square'"></fa>
+          Add Contact
+        </mat-panel-title>
+        <!--<mat-panel-description>-->
+        <!--Type your name and age-->
+        <!--</mat-panel-description>-->
+      </mat-expansion-panel-header>
+
+      <div class="form-item">
+        <wa-input
+          [id]="'contactName'"
+          [name]="'contactName'"
+          [label]="'Contact Name'"
+          [type]="'text'"
+          [control]="contactForm.controls['name']" >
+        </wa-input>
+      </div>
+
+      <div class="form-item">
+        <wa-input
+          [id]="'contactAddress'"
+          [name]="'contactAddress'"
+          [label]="'Contact Address'"
+          [type]="'qr'"
+          [control]="contactForm.controls['address']" >
+        </wa-input>
+      </div>
+
+      <div class="form-item">
+        <button mat-raised-button class="wallet-button" color="primary" (click)="createContact($event)" [disabled]="contactForm.invalid">Create Contact</button>
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-accordion>
+    <mat-expansion-panel #contactAccordion>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <fa [name]="'list-ul'"></fa>
+          Manage Contact
+        </mat-panel-title>
+        <!--<mat-panel-description>-->
+        <!--Type your name and age-->
+        <!--</mat-panel-description>-->
+      </mat-expansion-panel-header>
+
+      <mat-list>
+        <mat-list-item *ngFor="let contact of contactList">
+          <fa mat-list-icon [name]="'address-card'"></fa>
+          <h4 mat-line>
+            {{contact.name}}
+            <fa [name]="'times-rectangle'" class="warning list-button" (click)="removeContact(contact.id)"></fa>
+          </h4>
+        </mat-list-item>
+      </mat-list>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <fa [name]="'refresh'"></fa>
+          Reset Wallet
+        </mat-panel-title>
+        <!--<mat-panel-description>-->
+        <!--Type your name and age-->
+        <!--</mat-panel-description>-->
+      </mat-expansion-panel-header>
+
+      <div class="form-message warning">
+        <fa [name]="'warning'"></fa>
+        This will remove all your wallet!
+      </div>
+
+      <div class="form-item">
+        <button mat-raised-button class="wallet-button" color="warn" (click)="resetWallet($event)">Reset Wallet</button>
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
 
 </ion-content>

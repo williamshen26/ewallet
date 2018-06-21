@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{symbol}} Transactions</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content no-padding>
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <fa [name]="'angle-double-right'"></fa>
+          Sent transactions
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="list">
+        <div class="list-item" *ngFor="let log of sendLog" >
+          <div>
+            <label>Transaction Hash</label> {{log.hash}}
+          </div>
+          <div>
+            <label>To Address</label> {{log.to}}
+          </div>
+          <div>
+            <label>Amount</label> {{log.amount}} {{symbol}}
+          </div>
+        </div>
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <fa [name]="'angle-double-left'"></fa>
+          Received transactions
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="list">
+        <div class="list-item" *ngFor="let log of receiveLog" >
+          <div>
+            <label>Transaction Hash</label> {{log.hash}}
+          </div>
+          <div>
+            <label>From Address</label> {{log.from}}
+          </div>
+          <div>
+            <label>Amount</label> {{log.amount}} {{symbol}}
+          </div>
+        </div>
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+</ion-content>

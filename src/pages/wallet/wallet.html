@@ -3,20 +3,101 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Wallet</ion-title>
+    <ion-title>{{walletData.name}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
+<ion-content no-padding>
 
-  <h3>Welcome to your wallet!</h3>
+  <div class="wallet-top-section">
+    <div class="wallet-info">
+      <div class="wallet-balance">
+        <wa-data [data]="walletBalance" [status]="walletBalanceStatus"></wa-data>
+        <fa class="refresh-button" [name]="'refresh'" (click)="getBalance()"></fa>
+      </div>
+      <div class="wallet-address">
+        <p>{{walletData.address}}</p>
+      </div>
+    </div>
+  </div>
 
-  <p>
-    To check your balance on blockchain, click the button
-  </p>
-  <p>
-    <button ion-button color="primary" (click)="itemTapped($event)">Check Balance</button>
-  </p>
+  <div *ngFor="let token of walletData.tokens">
+    <wa-token
+      [address]="walletData.address"
+      [contract]="token.address"
+      [privateKey]="walletData.privateKey"
+      [symbol]="token.symbol"
+      [decimals]="token.decimal"
+      (onSendToken)="gotoSendToken($event)"
+      (onReceiveToken)="gotoReceiveToken($event)"
+      (onTransactionHistory)="gotoTransactionHistory($event)"
+    ></wa-token>
+  </div>
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <fa [name]="'plus-square'"></fa>
+          Add Token
+        </mat-panel-title>
+        <!--<mat-panel-description>-->
+        <!--Type your name and age-->
+        <!--</mat-panel-description>-->
+      </mat-expansion-panel-header>
+
+      <div class="form-item">
+        <wa-input
+          [id]="'tokenAddress'"
+          [name]="'tokenAddress'"
+          [label]="'Token Address'"
+          [type]="'qr'"
+          [control]="tokenForm.controls['address']" >
+        </wa-input>
+      </div>
+
+      <div class="form-item">
+        <label>Token Symbol</label>
+        <span>{{_model.symbol}}</span>
+      </div>
+
+      <div class="form-item">
+        <label>Token Decimals</label>
+        <span>{{_model.decimal}}</span>
+      </div>
+
+      <div class="form-item">
+        <button mat-raised-button class="wallet-button" color="primary" (click)="validateToken()" [disabled]="tokenForm.invalid">Validate Token</button>
+        <button mat-raised-button class="wallet-button" color="primary" (click)="addToken()" [disabled]="!tokenValid">Add Token</button>
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <fa [name]="'plus-square'"></fa>
+          Create Token
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="form-item">
+        <button mat-raised-button class="wallet-button" color="primary" (click)="createToken()">Create Token</button>
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
 
 </ion-content>
+
+
+
+
+
+
+
+
+
