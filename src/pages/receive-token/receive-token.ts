@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, NgZone, Output, EventEmitter} from '@angular/core';
+import {Component} from '@angular/core';
 import {NavParams} from 'ionic-angular';
 
 declare var cordova: any;
@@ -9,12 +9,12 @@ declare var cordova: any;
 })
 export class ReceiveTokenPage {
   private address: string;
-  private walletName: string;
-  private base64EncodedQRImage: string;
+  protected walletName: string;
+  protected base64EncodedQRImage: string;
 
   constructor(private navParams: NavParams) {
-    this.address = navParams.get('address');
-    this.walletName = navParams.get('walletName');
+    this.address = this.navParams.get('address');
+    this.walletName = this.navParams.get('walletName');
 
     let options = {
       width: 256,

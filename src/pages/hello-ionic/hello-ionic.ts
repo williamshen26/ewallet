@@ -48,7 +48,7 @@ export class HelloIonicPage {
     this.retrieveData();
   }
 
-  private createWallet() {
+  protected createWallet() {
     this.storage.get('wallets').then((wallets: Wallet[]) => {
       this._model.id = uuid();
 
@@ -67,7 +67,7 @@ export class HelloIonicPage {
     })
   }
 
-  private createContact() {
+  protected createContact() {
     this.storage.get('contacts').then((contacts: Contact[]) => {
       this.zone.run(() => {
         this._contactModel.id = uuid();
@@ -88,7 +88,7 @@ export class HelloIonicPage {
 
   }
 
-  private removeContact(contactId: string) {
+  protected removeContact(contactId: string) {
     this.storage.get('contacts').then((contacts: Contact[]) => {
       this.zone.run(() => {
 
@@ -107,7 +107,7 @@ export class HelloIonicPage {
     });
   }
 
-  private resetWallet() {
+  protected resetWallet() {
 
     this.storage.get('wallets').then((wallets: Wallet[]) => {
       wallets = [];
@@ -164,7 +164,7 @@ export class HelloIonicPage {
     })
   }
 
-  private onSubmit(event: Event) {
+  protected onSubmit(event: Event) {
     event.preventDefault();
   }
 

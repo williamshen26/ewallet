@@ -9,8 +9,8 @@ import {Contact} from '../../models/contact-model';
   templateUrl: 'contact-list-component.html'
 })
 export class ContactListComponent {
-  private wallets: Wallet[];
-  private contacts: Contact[];
+  protected wallets: Wallet[];
+  protected contacts: Contact[];
 
   constructor(
     public dialogRef: MatDialogRef<ContactListComponent>,
@@ -26,11 +26,11 @@ export class ContactListComponent {
     });
   }
 
-  private onNoClick(): void {
+  protected onNoClick(): void {
     this.dialogRef.close();
   }
 
-  private retrieveAddress(address: string) {
+  protected retrieveAddress(address: string) {
     this.dialogRef.close(address);
   }
 }

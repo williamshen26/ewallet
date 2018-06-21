@@ -12,15 +12,15 @@ export class QrDialogComponent {
 
   }
 
-  private onNoClick(): void {
+  protected onNoClick(): void {
     this.dialogRef.close();
   }
 
-  private useScan() {
+  protected useScan() {
     this.dialogRef.close('scan');
   }
 
-  private useFile() {
+  protected useFile() {
     this.dialogRef.close('file');
   }
 }

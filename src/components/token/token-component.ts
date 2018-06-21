@@ -31,8 +31,8 @@ export class TokenComponent implements OnInit {
   public onTransactionHistory = new EventEmitter();
 
 
-  private tokenBalance: string;
-  private tokenBalanceStatus: string = 'pending';
+  protected tokenBalance: string;
+  protected tokenBalanceStatus: string = 'pending';
 
 
   private myContract: any;
@@ -80,7 +80,7 @@ export class TokenComponent implements OnInit {
 
   }
 
-  private gotoSendToken() {
+  protected gotoSendToken() {
     this.onSendToken.emit({
       address: this.address,
       privateKey: this.privateKey,
@@ -90,11 +90,11 @@ export class TokenComponent implements OnInit {
     });
   }
 
-  private gotoReceiveToken() {
+  protected gotoReceiveToken() {
     this.onReceiveToken.emit(this.address);
   }
 
-  private gotoHistory() {
+  protected gotoHistory() {
     this.onTransactionHistory.emit({
       address: this.address,
       contract: this.contract,
@@ -103,7 +103,7 @@ export class TokenComponent implements OnInit {
   }
 
 
-  private onSubmit(event: Event) {
+  protected onSubmit(event: Event) {
     event.preventDefault();
   }
 

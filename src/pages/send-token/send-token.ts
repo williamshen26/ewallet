@@ -23,17 +23,17 @@ export class SendTokenPage {
   private address: string;
   private privateKey: string;
   private contract: string;
-  private symbol: string;
+  protected symbol: string;
   private decimals: number;
   private receipt: string;
 
-  private isLoading: boolean = false;
-  private isSuccessful: boolean = false;
+  protected isLoading: boolean = false;
+  protected isSuccessful: boolean = false;
 
   private tokenTransactionForm: FormGroup;
   private _model: TokenTransaction = new TokenTransaction();
 
-  private copyHash() {
+  protected copyHash() {
     this.clipboard.copy(this.receipt)
       .then(() => {
         this.snackBar.open('copied to clipboard', 'Dismiss', {
@@ -58,7 +58,7 @@ export class SendTokenPage {
     });
   }
 
-  private sendToken() {
+  protected sendToken() {
     this.isLoading = true;
     this.tokenTransactionForm.disable();
 
@@ -113,7 +113,7 @@ export class SendTokenPage {
       });
   }
 
-  private getEstimatedGas() {
+  protected getEstimatedGas() {
     let transferValue = Math.pow(10, this.decimals)*this._model.amount;
 
     let data = this.walletUtil.encodeFunctionTxData('transfer', ['address', 'uint256'], [this._model.to, this.walletUtil.toFixed(transferValue).toString()]);
@@ -129,7 +129,7 @@ export class SendTokenPage {
       });
   }
 
-  private showContactList() {
+  protected showContactList() {
     let dialogRef = this.dialog.open(ContactListComponent, {
       width: '900px',
       data: { }
@@ -159,7 +159,7 @@ export class SendTokenPage {
               private platform: Platform,
               private clipboard: Clipboard,
               private zone: NgZone) {
-    this.tokenInfo = navParams.get('tokenInfo');
+    this.tokenInfo = this.navParams.get('tokenInfo');
 
     this.address = this.tokenInfo['address'];
     this.privateKey = this.tokenInfo['privateKey'];

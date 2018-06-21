@@ -40,9 +40,9 @@ export class MyApp {
       { title: 'Home', component: HelloIonicPage, data: {}, type: 'home' }
     ];
 
-    storage.get('wallets').then((wallets: Wallet[]) => {
+    this.storage.get('wallets').then((wallets: Wallet[]) => {
       if (!wallets) {
-        storage.set('wallets', []);
+        this.storage.set('wallets', []);
       }
 
       for (let wallet of wallets) {
@@ -51,24 +51,24 @@ export class MyApp {
 
     });
 
-    storage.get('tokens').then((tokens: Token[]) => {
+    this.storage.get('tokens').then((tokens: Token[]) => {
       if (!tokens) {
-        storage.set('tokens', []);
+        this.storage.set('tokens', []);
       }
     });
 
-    storage.get('contacts').then((contacts: Contact[]) => {
+    this.storage.get('contacts').then((contacts: Contact[]) => {
       if (!contacts) {
-        storage.set('contacts', []);
+        this.storage.set('contacts', []);
       }
     });
 
-    event.subscribe('wallet.created', (wallet: Wallet) => {
+    this.event.subscribe('wallet.created', (wallet: Wallet) => {
       console.log('create wallet', wallet);
       this.pages.push({title: wallet.name, component: WalletPage, data: wallet, type: 'wallet'})
     });
 
-    event.subscribe('wallet.reset', () => {
+    this.event.subscribe('wallet.reset', () => {
       console.log('reset wallet');
 
       let length = this.pages.length;

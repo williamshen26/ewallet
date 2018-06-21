@@ -1,9 +1,9 @@
-import {Component, Input, NgZone, Output, EventEmitter, ViewChild, ElementRef} from '@angular/core';
+import {Component, Input, NgZone, Output, EventEmitter} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {QrUtil} from "../../utils/qr.util";
 import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 import {Platform} from 'ionic-angular';
-import {Subscription, Observable} from 'rxjs';
+import {Subscription} from 'rxjs';
 import Qrcode from 'jsqrcode/src/qrcode.js';
 // import * as qrcode from '@types/jsqrcode'
 import {QrDialogComponent} from '../qr-dialog/qr-dialog-component';
@@ -29,20 +29,20 @@ export class InputComponent {
     }
   };
 
-  private isQr(): boolean {
+  protected isQr(): boolean {
     return this._type.indexOf('qr') !== -1;
   }
 
-  private isGas(): boolean {
+  protected isGas(): boolean {
     return this._type.indexOf('gas') !== -1;
   }
 
-  private isList(): boolean {
+  protected isList(): boolean {
     return this._type.indexOf('list') !== -1;
   }
 
   private _type: InputType[];
-  private inputType: string;
+  protected inputType: string;
 
   @Input()
   public control: FormControl;
@@ -73,16 +73,16 @@ export class InputComponent {
 
   }
 
-  private getEstimatedGas() {
+  protected getEstimatedGas() {
     this.estimateGas.emit();
   }
 
-  private showList(event: Event) {
+  protected showList(event: Event) {
     event.preventDefault();
     this.onShowList.emit();
   }
 
-  private showQrOption() {
+  protected showQrOption() {
     let dialogRef = this.dialog.open(QrDialogComponent, {
       width: '500px',
       data: { }
@@ -182,14 +182,6 @@ export class InputComponent {
     });
 
 
-
-  }
-
-  private decodeQrFile() {
-
-  }
-
-  private cameraFailed() {
 
   }
 

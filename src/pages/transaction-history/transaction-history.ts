@@ -1,8 +1,7 @@
-import {Component, NgZone, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import W3 from 'web3';
 import * as globals from '../../utils/global.util';
 import {NavParams} from 'ionic-angular';
-import {Log} from "web3/types";
 import {TokenTransaction} from "../../models/token-transaction-model";
 
 export const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
@@ -15,14 +14,13 @@ export class TransactionHistoryPage implements OnInit {
   private transactionInfo: any;
   private address: string;
   private contract: string;
-  private symbol: string;
+  protected symbol: string;
 
   private sendLog: Array<TokenTransaction> = [];
   private receiveLog: Array<TokenTransaction> = [];
 
-  constructor(private navParams: NavParams,
-              private zone: NgZone) {
-    this.transactionInfo = navParams.get('transactionInfo');
+  constructor(private navParams: NavParams) {
+    this.transactionInfo = this.navParams.get('transactionInfo');
 
     this.address = this.transactionInfo['address'];
     this.contract = this.transactionInfo['contract'];
