@@ -31,6 +31,15 @@
       <div class="wallet-address">
         <p>{{walletData.address}}</p>
       </div>
+      <div class="wallet-control">
+        <a href="#" (click)="gotoSendETH()">
+          <fa [name]="'arrow-up'"></fa> Send
+        </a>
+
+        <a href="#" (click)="gotoReceiveToken(walletData.address)">
+          <fa [name]="'arrow-down'"></fa> Receive
+        </a>
+      </div>
     </div>
   </div>
 

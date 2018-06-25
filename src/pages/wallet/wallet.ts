@@ -12,6 +12,7 @@ import {MatSnackBar, MatDialog} from "@angular/material";
 import {ConfirmDialogComponent} from "../../components/confirm-dialog/confirm-dialog.component";
 import {Platform} from 'ionic-angular';
 import {AddTokenPage} from "../add-token/add-token";
+import {SendEthPage} from "../send-eth/send-eth";
 // import solc from 'solc/index.js';
 
 export const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
@@ -149,6 +150,15 @@ export class WalletPage {
     this.storageUtil.removeWallet(this.walletData.id).then((wallet: Wallet) => {
       this.event.publish('wallet.removed', wallet);
       this.navCtrl.goToRoot({});
+    });
+  }
+
+  protected gotoSendETH() {
+    this.navCtrl.push(SendEthPage, {
+      ethInfo: {
+        address: this.walletData.address,
+        privateKey: this.walletData.privateKey
+      }
     });
   }
 

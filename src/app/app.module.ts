@@ -9,6 +9,7 @@ import { WalletPage } from '../pages/wallet/wallet';
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { SendTokenPage } from '../pages/send-token/send-token';
 import { ReceiveTokenPage } from '../pages/receive-token/receive-token'
+import { SendEthPage } from '../pages/send-eth/send-eth';
 import { AddTokenPage } from '../pages/add-token/add-token'
 import { TransactionHistoryPage } from '../pages/transaction-history/transaction-history'
 import { ItemDetailsPage } from '../pages/item-details/item-details';
@@ -33,6 +34,7 @@ import { PipeModule } from '../pipes/pipes-module'
     HelloIonicPage,
     SendTokenPage,
     ReceiveTokenPage,
+    SendEthPage,
     AddTokenPage,
     TransactionHistoryPage,
     WalletPage,
@@ -63,6 +65,7 @@ import { PipeModule } from '../pipes/pipes-module'
     HelloIonicPage,
     SendTokenPage,
     ReceiveTokenPage,
+    SendEthPage,
     AddTokenPage,
     TransactionHistoryPage,
     WalletPage,
