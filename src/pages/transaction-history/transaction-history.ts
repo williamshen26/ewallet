@@ -3,6 +3,9 @@ import W3 from 'web3';
 import * as globals from '../../utils/global.util';
 import {NavParams} from 'ionic-angular';
 import {TokenTransaction} from "../../models/token-transaction-model";
+import {Wallet} from '../../models/wallet-model';
+import {Contact} from '../../models/contact-model';
+import {StorageUtil} from "../../utils/storage.util";
 
 export const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
 
@@ -15,16 +18,26 @@ export class TransactionHistoryPage implements OnInit {
   private address: string;
   private contract: string;
   protected symbol: string;
+  protected wallets: Wallet[];
+  protected contacts: Contact[];
 
   private sendLog: Array<TokenTransaction> = [];
   private receiveLog: Array<TokenTransaction> = [];
 
-  constructor(private navParams: NavParams) {
+  constructor(private navParams: NavParams, private storageUtil: StorageUtil) {
     this.transactionInfo = this.navParams.get('transactionInfo');
 
     this.address = this.transactionInfo['address'];
     this.contract = this.transactionInfo['contract'];
     this.symbol = this.transactionInfo['symbol'];
+
+    this.storageUtil.getWallets().then((wallets: Wallet[]) => {
+      this.wallets = wallets;
+    });
+
+    this.storageUtil.getContacts().then((contacts: Contact[]) => {
+      this.contacts = contacts;
+    });
 
   }
 

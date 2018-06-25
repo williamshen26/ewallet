@@ -11,18 +11,35 @@
     </mat-expansion-panel-header>
 
 
-  <div class="form-item">
-    <div class="balance-section" (click)="getTokenBalance()">
-      <wa-data [data]="tokenBalance" [status]="tokenBalanceStatus"></wa-data>
-      <fa class="refresh-button" [name]="'refresh'"></fa>
-    </div>
-  </div>
+    <div class="form-item top-section">
+      <div class="balance-section" (click)="getTokenBalance()">
+        <wa-data [data]="tokenBalance" [status]="tokenBalanceStatus"></wa-data>
+        <fa class="refresh-button" [name]="'refresh'"></fa>
+      </div>
+      <div class="control-section">
+        <a href="#" (click)="gotoSendToken()">
+          <fa [name]="'arrow-up'"></fa> Send
+        </a>
 
-  <div class="form-item">
-    <button mat-raised-button class="wallet-button" color="primary" (click)="gotoSendToken()">Send Token</button>
-    <button mat-raised-button class="wallet-button" color="primary" (click)="gotoReceiveToken()">Receive Token</button>
-    <button mat-raised-button class="wallet-button" color="primary" (click)="gotoHistory()">Transaction History</button>
-  </div>
+        <a href="#" (click)="gotoReceiveToken()">
+          <fa [name]="'arrow-down'"></fa> Receive
+        </a>
+
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <fa [name]="'ellipsis-v'"></fa>
+        </button>
+
+      </div>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="removeToken()">Remove Token</button>
+      </mat-menu>
+    </div>
+
+    <div class="form-item">
+      <button mat-raised-button class="wallet-button" color="primary" (click)="gotoHistory()">Transaction History</button>
+    </div>
+
 
 
   </mat-expansion-panel>

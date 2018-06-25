@@ -22,6 +22,21 @@
         <!--</mat-panel-description>-->
       </mat-expansion-panel-header>
 
+      <div class="success growl" *ngIf="walletCreateSuccessful">
+        <div class="growl-icon">
+          <fa class="state-icon" [name]="'check'"></fa>
+        </div>
+        <div class="growl-content">
+          <div class="growl-title">
+            Congratulation! Your wallet is added!
+          </div>
+          <div class="growl-message">
+            {{createdAddress}}
+            <fa [name]="'copy'" (click)="copyWallet()"></fa>
+          </div>
+        </div>
+      </div>
+
       <div class="form-item">
         <wa-input
           [id]="'walletName'"
@@ -43,13 +58,19 @@
       </div>
 
       <div class="form-item">
-        <button mat-raised-button class="wallet-button" color="primary" (click)="createWallet($event)" [disabled]="walletForm.invalid">Create Wallet</button>
+        <button mat-raised-button class="wallet-button" color="primary" (click)="createWallet($event)" [disabled]="walletForm.invalid">Add Wallet</button>
+      </div>
+
+      <div class="form-item">
+        Don't have a account? Click to generate one.
+      </div>
+
+      <div class="form-item">
+        <button mat-raised-button class="wallet-button" color="primary" (click)="generateAccount($event)">Generate Account</button>
       </div>
 
     </mat-expansion-panel>
-  </mat-accordion>
 
-  <mat-accordion>
     <mat-expansion-panel #addContactAccordion>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -86,9 +107,7 @@
       </div>
 
     </mat-expansion-panel>
-  </mat-accordion>
 
-  <mat-accordion>
     <mat-expansion-panel #contactAccordion>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -105,15 +124,13 @@
           <fa mat-list-icon [name]="'address-card'"></fa>
           <h4 mat-line>
             {{contact.name}}
-            <fa [name]="'times-rectangle'" class="warning list-button" (click)="removeContact(contact.id)"></fa>
+            <fa [name]="'times-rectangle'" class="warning list-button" (click)="readyRemoveContact(contact.id)"></fa>
           </h4>
         </mat-list-item>
       </mat-list>
 
     </mat-expansion-panel>
-  </mat-accordion>
 
-  <mat-accordion>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -131,7 +148,7 @@
       </div>
 
       <div class="form-item">
-        <button mat-raised-button class="wallet-button" color="warn" (click)="resetWallet($event)">Reset Wallet</button>
+        <button mat-raised-button class="wallet-button" color="warn" (click)="readyResetWallet($event)">Reset Wallet</button>
       </div>
 
     </mat-expansion-panel>

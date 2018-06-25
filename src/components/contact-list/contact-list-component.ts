@@ -1,8 +1,8 @@
 import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { Storage } from '@ionic/storage';
 import {Wallet} from '../../models/wallet-model';
 import {Contact} from '../../models/contact-model';
+import {StorageUtil} from "../../utils/storage.util";
 
 @Component({
   selector: 'contact-list',
@@ -14,14 +14,14 @@ export class ContactListComponent {
 
   constructor(
     public dialogRef: MatDialogRef<ContactListComponent>,
-    private storage: Storage,
+    private storageUtil: StorageUtil,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
-    this.storage.get('wallets').then((wallets: Wallet[]) => {
+    this.storageUtil.getWallets().then((wallets: Wallet[]) => {
       this.wallets = wallets;
     });
 
-    this.storage.get('contacts').then((contacts: Contact[]) => {
+    this.storageUtil.getContacts().then((contacts: Contact[]) => {
       this.contacts = contacts;
     });
   }

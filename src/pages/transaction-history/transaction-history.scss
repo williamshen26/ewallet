@@ -51,4 +51,17 @@ transaction-history {
       max-height: 50px;
     }
   }
+
+  .transaction-entry {
+    display: table;
+    width: 100%;
+
+    .transaction-info {
+      display: table-row;
+
+      .transaction-label, .transaction-data {
+        display: table-cell;
+      }
+    }
+  }
 }

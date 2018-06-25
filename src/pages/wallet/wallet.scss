@@ -62,8 +62,27 @@ wallet {
     display: inline;
 
     p {
-      word-break: break-word;
+      word-break: break-all;
     }
+  }
+
+  ion-buttons {
+
+    margin-right: 10px;
+
+    button {
+      background-color: transparent;
+
+      fa {
+        font-size: 18px;
+      }
+    }
+
+    .add-button {
+      color: #2ec95c;
+    }
+
+
   }
 
 }

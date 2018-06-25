@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Add Token</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="form-item">
+    <wa-input
+      [id]="'tokenAddress'"
+      [name]="'tokenAddress'"
+      [label]="'Token Address'"
+      [type]="'qr'"
+      [control]="tokenForm.controls['address']" >
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <label>Token Symbol</label>
+    <span>{{_model.symbol}}</span>
+  </div>
+
+  <div class="form-item">
+    <label>Token Decimals</label>
+    <span>{{_model.decimal}}</span>
+  </div>
+
+  <div class="form-item">
+    <button mat-raised-button class="wallet-button" color="primary" (click)="validateToken()"  *ngIf="!tokenValid" [disabled]="tokenForm.invalid">Validate Token</button>
+    <button mat-raised-button class="wallet-button" color="primary" (click)="addToken()" *ngIf="tokenValid">Add Token</button>
+  </div>
+</ion-content>

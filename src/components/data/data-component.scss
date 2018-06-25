@@ -1,5 +1,9 @@
 wa-data {
 
+  span {
+    word-break: break-all;
+  }
+
   .wa-spinner {
     -webkit-animation: rotating 2s linear infinite;
     -moz-animation: rotating 2s linear infinite;

@@ -1,0 +1,32 @@
+wa-token {
+  .top-section {
+    display: table;
+    width: 100%;
+    margin-bottom: 30px;
+
+    .balance-section {
+      display: table-cell;
+    }
+
+    .control-section {
+      display: table-cell;
+      text-align: right;
+      min-width: 170px;
+
+      a {
+        text-decoration: none;
+      }
+
+      a + a {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .load-more {
+    font-size: 24px;
+    text-align: center;
+  }
+
+
+}

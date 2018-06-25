@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { MatButtonModule, MatCheckboxModule, MatInputModule, MatExpansionModule, MatListModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatInputModule, MatExpansionModule, MatListModule, MatMenuModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp } from 'ionic-angular';
@@ -15,6 +15,7 @@ import {InputComponent} from './input/input-component';
 import {TokenComponent} from './token/token-component';
 import {ContactListComponent} from './contact-list/contact-list-component';
 import {QrDialogComponent} from './qr-dialog/qr-dialog-component'
+import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {QrDialogComponent} from './qr-dialog/qr-dialog-component'
     InputComponent,
     TokenComponent,
     ContactListComponent,
-    QrDialogComponent
+    QrDialogComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     FormsModule,
@@ -34,19 +36,22 @@ import {QrDialogComponent} from './qr-dialog/qr-dialog-component'
     MatInputModule,
     MatExpansionModule,
     MatListModule,
+    MatMenuModule,
     Angular2FontawesomeModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     ContactListComponent,
-    QrDialogComponent
+    QrDialogComponent,
+    ConfirmDialogComponent
   ],
   exports: [
     DataComponent,
     InputComponent,
     TokenComponent,
     ContactListComponent,
-    QrDialogComponent
+    QrDialogComponent,
+    ConfirmDialogComponent
   ],
   providers: [
     QRScanner,
