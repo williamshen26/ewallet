@@ -1,16 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
 
 import {Platform, MenuController, Nav, Events} from 'ionic-angular';
-import { Storage } from '@ionic/storage';
 
 import { WalletPage } from '../pages/wallet/wallet';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import {HelloIonicPage} from '../pages/hello-ionic/hello-ionic';
-import {Wallet} from '../models/wallet-model';
-import {Token} from '../models/token-model';
-import {Contact} from "../models/contact-model";
+import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
+import { Wallet } from '../models/wallet-model';
+import { StorageUtil } from "../utils/storage.util";
 
 
 @Component({
@@ -28,7 +26,7 @@ export class MyApp {
     public menu: MenuController,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
-    private storage: Storage,
+    private storageUtil: StorageUtil,
     private event: Events
   ) {
     this.initializeApp();
@@ -40,32 +38,31 @@ export class MyApp {
       { title: 'Home', component: HelloIonicPage, data: {}, type: 'home' }
     ];
 
-    this.storage.get('wallets').then((wallets: Wallet[]) => {
-      if (!wallets) {
-        this.storage.set('wallets', []);
-      }
-
+    this.storageUtil.getWallets().then((wallets: Wallet[]) => {
       for (let wallet of wallets) {
         this.pages.push({title: wallet.name, component: WalletPage, data: wallet, type: 'wallet'})
       }
-
     });
 
-    this.storage.get('tokens').then((tokens: Token[]) => {
-      if (!tokens) {
-        this.storage.set('tokens', []);
-      }
-    });
-
-    this.storage.get('contacts').then((contacts: Contact[]) => {
-      if (!contacts) {
-        this.storage.set('contacts', []);
-      }
-    });
+    this.storageUtil.getTokens();
+    this.storageUtil.getContacts();
 
     this.event.subscribe('wallet.created', (wallet: Wallet) => {
       console.log('create wallet', wallet);
       this.pages.push({title: wallet.name, component: WalletPage, data: wallet, type: 'wallet'})
+    });
+
+    this.event.subscribe('wallet.removed', (wallet: Wallet) => {
+      console.log('reset removed', wallet);
+
+      for (let page of this.pages) {
+        if(page.data['id'] === wallet.id) {
+          let index = this.pages.indexOf(page);
+
+          this.pages.splice(index, 1);
+        }
+      }
+
     });
 
     this.event.subscribe('wallet.reset', () => {

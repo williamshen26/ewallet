@@ -1,17 +1,18 @@
 import {Component, Output, EventEmitter, NgZone, ViewChild} from '@angular/core';
 import W3 from 'web3';
-import { Storage } from '@ionic/storage';
 import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 import {Wallet} from '../../models/wallet-model';
 import {WalletUtil} from '../../utils/wallet.util';
 
-import uuid from 'uuid/index.js'
 import {Events} from 'ionic-angular';
 import {CryptoValidators} from '../../validators/crypto-validator';
-import {Token} from '../../models/token-model';
 import {Contact} from '../../models/contact-model';
-import {MatExpansionPanel} from '@angular/material';
+import {MatExpansionPanel, MatDialog, MatSnackBar} from '@angular/material';
 import * as globals from '../../utils/global.util';
+import {StorageUtil} from '../../utils/storage.util';
+import {ConfirmDialogComponent} from "../../components/confirm-dialog/confirm-dialog.component";
+import {Platform} from 'ionic-angular';
+import {Clipboard} from "@ionic-native/clipboard";
 
 export const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
 
@@ -28,58 +29,65 @@ export class HelloIonicPage {
 
   private contactList: Contact[];
 
+  protected walletCreateSuccessful: boolean = false;
+  protected createdAddress: string;
+  protected createdPrivateKey: string;
+
   @ViewChild('contactAccordion')
   private contactAccordion: MatExpansionPanel;
-
-  @ViewChild('addContactAccordion')
-  private addContactAccordion: MatExpansionPanel;
 
   @Output()
   public onCreate = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
-    private storage: Storage,
     private event: Events,
     private walletUtil: WalletUtil,
-    private zone: NgZone
+    private storageUtil: StorageUtil,
+    private dialog: MatDialog,
+    private zone: NgZone,
+    private platform: Platform,
+    private clipboard: Clipboard,
+    private snackBar: MatSnackBar
   ) {
     this.buildForm();
     this.retrieveData();
   }
 
   protected createWallet() {
-    this.storage.get('wallets').then((wallets: Wallet[]) => {
-      this._model.id = uuid();
+    this.walletForm.controls['privateKey'].setValue(this._model.privateKey.startsWith("0x") ? this._model.privateKey : '0x' + this._model.privateKey);
 
-      this.walletForm.controls['privateKey'].setValue(this._model.privateKey.startsWith("0x") ? this._model.privateKey : '0x' + this._model.privateKey);
+    this.walletForm.controls['address'].setValue(web3.eth.accounts.privateKeyToAccount(this._model.privateKey).address);
+    this.walletForm.controls['address'].updateValueAndValidity();
 
-      this.walletForm.controls['address'].setValue(web3.eth.accounts.privateKeyToAccount(this._model.privateKey).address);
-      this.walletForm.controls['address'].updateValueAndValidity();
+    let walletModel: Wallet = Object.assign({}, this._model);
 
-      let walletModel: Wallet = Object.assign({}, this._model);
-
-      wallets.push(walletModel);
-      this.storage.set('wallets', wallets);
+    this.storageUtil.addWallet(walletModel).then(() => {
       this.event.publish('wallet.created', walletModel);
 
-      this.walletForm.reset();
-    })
+      this.zone.run(() => {
+        this.walletCreateSuccessful = true;
+        this.createdAddress = this._model.address;
+        this.createdPrivateKey = this._model.privateKey;
+
+        this.walletForm.reset();
+      });
+
+    });
+  }
+
+  protected generateAccount() {
+    this.walletForm.controls['privateKey'].setValue(web3.eth.accounts.create().privateKey);
+    this.walletForm.controls['privateKey'].updateValueAndValidity();
   }
 
   protected createContact() {
-    this.storage.get('contacts').then((contacts: Contact[]) => {
+    let contactModel: Contact = Object.assign({}, this._contactModel);
+
+    this.storageUtil.addContact(contactModel).then(() => {
       this.zone.run(() => {
-        this._contactModel.id = uuid();
-
-        let contactModel: Contact = Object.assign({}, this._contactModel);
-
-        contacts.push(contactModel);
-        this.storage.set('contacts', contacts);
-
         this.contactList.push(contactModel);
 
-        this.addContactAccordion.close();
         this.contactAccordion.open();
 
         this.contactForm.reset();
@@ -88,41 +96,68 @@ export class HelloIonicPage {
 
   }
 
-  protected removeContact(contactId: string) {
-    this.storage.get('contacts').then((contacts: Contact[]) => {
-      this.zone.run(() => {
+  protected readyRemoveContact(contactId: string) {
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '500px',
+      data: {
+        message: 'Are you sure you want to remove this contact?'
+      }
+    });
 
-        for (let contact of contacts) {
-          if (contact.id === contactId) {
-            let index = contacts.indexOf(contact);
-            contacts.splice(index, 1);
-            break;
-          }
+    let deregister: Function = this.platform.registerBackButtonAction(() => {
+      dialogRef.close();
+      deregister();
+    },1);
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result) {
+        if (result) {
+          this.removeContact(contactId);
         }
+      }
+      deregister();
 
-        this.storage.set('contacts', contacts);
+    });
+  }
 
+  private removeContact(contactId: string) {
+
+    this.storageUtil.removeContact(contactId).then((contacts) => {
+      this.zone.run(() => {
         this.contactList = contacts;
       });
     });
   }
 
+  protected readyResetWallet() {
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '500px',
+      data: {
+        message: 'Are you sure you want to reset the wallet?'
+      }
+    });
+
+    let deregister: Function = this.platform.registerBackButtonAction(() => {
+      dialogRef.close();
+      deregister();
+    },1);
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result) {
+        if (result) {
+          this.resetWallet();
+        }
+      }
+      deregister();
+
+    });
+  }
+
   protected resetWallet() {
 
-    this.storage.get('wallets').then((wallets: Wallet[]) => {
-      wallets = [];
-      this.storage.set('wallets', wallets);
-    });
-
-    this.storage.get('tokens').then((tokens: Token[]) => {
-      tokens = [];
-      this.storage.set('tokens', tokens);
-    });
-
-    this.storage.get('contacts').then((contacts: Contact[]) => {
-      contacts = [];
-      this.storage.set('contacts', contacts);
-    });
+    this.storageUtil.resetEveryThing();
 
     this.contactList = [];
 
@@ -130,7 +165,7 @@ export class HelloIonicPage {
   }
 
   private retrieveData() {
-    this.storage.get('contacts').then((contacts: Contact[]) => {
+    this.storageUtil.getContacts().then((contacts: Contact[]) => {
       this.contactList = contacts;
     });
   }
@@ -166,6 +201,15 @@ export class HelloIonicPage {
 
   protected onSubmit(event: Event) {
     event.preventDefault();
+  }
+
+  protected copyWallet() {
+    this.clipboard.copy('{address: \'' + this.createdAddress + '\', privateKey: \'' + this.createdPrivateKey + '\'}')
+      .then(() => {
+        this.snackBar.open('copied to clipboard', 'Dismiss', {
+          duration: 2000,
+        });
+      });
   }
 
 }

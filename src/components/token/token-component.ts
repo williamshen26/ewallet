@@ -11,6 +11,8 @@ export const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
 export class TokenComponent implements OnInit {
 
   @Input()
+  private tokenId: string;
+  @Input()
   private address: string;
   @Input()
   private privateKey: string;
@@ -29,6 +31,9 @@ export class TokenComponent implements OnInit {
 
   @Output()
   public onTransactionHistory = new EventEmitter();
+
+  @Output()
+  public onRemoveToken = new EventEmitter();
 
 
   protected tokenBalance: string;
@@ -50,14 +55,6 @@ export class TokenComponent implements OnInit {
         gas: '4700000'
       }
     );
-
-    // web3.eth.getPastLogs({
-    //   fromBlock: '0x0',
-    //   toBlock: 'latest',
-    //   address: this.contract,
-    //   topics: [web3.utils.soliditySha3("Transfer(address,address,uint256)"), web3.utils.padLeft(this.address, 64, '0'), null]
-    // }).then(console.log);
-
 
     this.getTokenBalance();
 
@@ -102,6 +99,9 @@ export class TokenComponent implements OnInit {
     });
   }
 
+  protected removeToken() {
+    this.onRemoveToken.emit(this.tokenId);
+  }
 
   protected onSubmit(event: Event) {
     event.preventDefault();
