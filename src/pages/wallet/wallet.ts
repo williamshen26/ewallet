@@ -98,8 +98,12 @@ export class WalletPage {
 
   private removeToken(tokenId: string) {
     this.storageUtil.removeTokenFromWallet(tokenId, this.walletData.id).then((token: Token) => {
-      let index = this.walletData.tokens.indexOf(token);
-      this.walletData.tokens.splice(index, 1);
+      for (let index = 0; index < this.walletData.tokens.length; index++) {
+        if (this.walletData.tokens[index].id === token.id) {
+          this.walletData.tokens.splice(index, 1);
+          break;
+        }
+      }
     })
   }
 
