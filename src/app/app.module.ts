@@ -27,6 +27,9 @@ import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawe
 
 import { ComponentsModule } from '../components/components-module'
 import { PipeModule } from '../pipes/pipes-module'
+import {ContractTemplatesPage} from "../pages/contract-templates/contract-templates";
+import {HttpClientModule} from "@angular/common/http";
+import {ContractFormPage} from "../pages/contract-form/contract-form";
 
 @NgModule({
   declarations: [
@@ -38,6 +41,8 @@ import { PipeModule } from '../pipes/pipes-module'
     AddTokenPage,
     TransactionHistoryPage,
     WalletPage,
+    ContractTemplatesPage,
+    ContractFormPage,
     ItemDetailsPage,
     ListPage
   ],
@@ -46,6 +51,7 @@ import { PipeModule } from '../pipes/pipes-module'
     PipeModule,
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     MatButtonModule,
     MatCheckboxModule,
     MatInputModule,
@@ -69,6 +75,8 @@ import { PipeModule } from '../pipes/pipes-module'
     AddTokenPage,
     TransactionHistoryPage,
     WalletPage,
+    ContractTemplatesPage,
+    ContractFormPage,
     ItemDetailsPage,
     ListPage
   ],

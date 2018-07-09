@@ -13,6 +13,7 @@ import {ConfirmDialogComponent} from "../../components/confirm-dialog/confirm-di
 import {Platform} from 'ionic-angular';
 import {AddTokenPage} from "../add-token/add-token";
 import {SendEthPage} from "../send-eth/send-eth";
+import {ContractTemplatesPage} from "../contract-templates/contract-templates";
 // import solc from 'solc/index.js';
 
 export const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
@@ -182,6 +183,14 @@ export class WalletPage {
       walletAddress: this.walletData.address,
       callback: this.addTokenCallbackFunction
     });
+  }
+
+  protected gotoCreateContract() {
+    this.navCtrl.push(ContractTemplatesPage, {
+      walletId: this.walletData.id,
+      walletAddress: this.walletData.address,
+      walletKey: this.walletData.privateKey
+    })
   }
 
 }

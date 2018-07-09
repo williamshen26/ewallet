@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Pick a contract</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-padding>
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let template of templates">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{template.title}}
+          <span>
+            ({{template.cost}} ETH)
+          </span>
+        </mat-panel-title>
+        <!--<mat-panel-description>-->
+        <!--Type your name and age-->
+        <!--</mat-panel-description>-->
+      </mat-expansion-panel-header>
+
+      <div class="form-item">
+        {{template.message}}
+      </div>
+
+      <div class="form-item">
+        <button mat-raised-button class="wallet-button" color="primary" (click)="gotoCreateContract(template.id)" >I want this!</button>
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+</ion-content>

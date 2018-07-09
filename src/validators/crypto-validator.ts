@@ -47,4 +47,44 @@ export class CryptoValidators {
     return valid ? null : {privateKeyInvalid: true};
   }
 
+  public static decimalNotTooLarge(control: FormControl) {
+    if (!control || control.value == null || control.value == '') {
+      return;
+    }
+    let value: number = control.value;
+
+    let valid = value <= 25;
+
+    return valid ? null : {decimalTooLarge: true};
+
+  }
+
+  public static validContractName(control: FormControl) {
+    if (!control || control.value == null || control.value == '') {
+      return;
+    }
+    let value: string = control.value;
+
+    let matches = String(value).match(/^[A-z]+[\w]*$/);
+
+    let valid = matches && matches.length === 1;
+
+    return valid ? null : {invalidContractName: true};
+
+  }
+
+  public static validTokenSymbol(control: FormControl) {
+    if (!control || control.value == null || control.value == '') {
+      return;
+    }
+    let value: string = control.value;
+
+    let matches = String(value).match(/^[\w]+$/);
+
+    let valid = matches && matches.length === 1;
+
+    return valid ? null : {invalidTokenSymbol: true};
+
+  }
+
 }
