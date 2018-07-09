@@ -47,24 +47,31 @@ wallet {
     display:table-cell;
     text-align: center;
     vertical-align: middle;
-  }
 
-  .wallet-balance {
-    font-size: 24px;
-    color: #ffc107;
-    font-weight: bold;
-    display: block;
-  }
+    .wallet-balance {
+      font-size: 24px;
+      color: #ffc107;
+      font-weight: bold;
+      display: block;
+    }
 
-  .wallet-address {
-    font-size: 16px;
-    color: #ffc107;
-    display: inline;
+    .wallet-address {
+      font-size: 16px;
+      color: #ffc107;
+      display: inline;
 
-    p {
-      word-break: break-all;
+      p {
+        word-break: break-all;
+      }
+    }
+
+    .wallet-control {
+      color: #ffc107;
+
     }
   }
+
+
 
   ion-buttons {
 

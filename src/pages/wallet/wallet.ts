@@ -12,6 +12,8 @@ import {MatSnackBar, MatDialog} from "@angular/material";
 import {ConfirmDialogComponent} from "../../components/confirm-dialog/confirm-dialog.component";
 import {Platform} from 'ionic-angular';
 import {AddTokenPage} from "../add-token/add-token";
+import {SendEthPage} from "../send-eth/send-eth";
+import {ContractTemplatesPage} from "../contract-templates/contract-templates";
 // import solc from 'solc/index.js';
 
 export const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
@@ -70,24 +72,6 @@ export class WalletPage {
 
   }
 
-
-  // protected createToken() {
-    // let myContract = new web3.eth.Contract(
-    //   [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"tokens","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"from","type":"address"},{"name":"to","type":"address"},{"name":"tokens","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"_totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"tokenOwner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"acceptOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"a","type":"uint256"},{"name":"b","type":"uint256"}],"name":"safeSub","outputs":[{"name":"c","type":"uint256"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"tokens","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"a","type":"uint256"},{"name":"b","type":"uint256"}],"name":"safeDiv","outputs":[{"name":"c","type":"uint256"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"tokens","type":"uint256"},{"name":"data","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"a","type":"uint256"},{"name":"b","type":"uint256"}],"name":"safeMul","outputs":[{"name":"c","type":"uint256"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":true,"inputs":[],"name":"newOwner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"tokenAddress","type":"address"},{"name":"tokens","type":"uint256"}],"name":"transferAnyERC20Token","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"tokenOwner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"remaining","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"a","type":"uint256"},{"name":"b","type":"uint256"}],"name":"safeAdd","outputs":[{"name":"c","type":"uint256"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"_newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"tokens","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"tokenOwner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"tokens","type":"uint256"}],"name":"Approval","type":"event"}],
-    //   this._model.address,
-    //   {
-    //     from: this.walletData.address, // default from address
-    //     gas: '4700000'
-    //   }
-    // );
-    //
-    // solc().compile('', 1, this.findImports);
-  // }
-
-  // private findImports(path) {
-  //
-  // }
-
   protected readyRemoveToken(tokenId: string) {
     let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '500px',
@@ -115,8 +99,12 @@ export class WalletPage {
 
   private removeToken(tokenId: string) {
     this.storageUtil.removeTokenFromWallet(tokenId, this.walletData.id).then((token: Token) => {
-      let index = this.walletData.tokens.indexOf(token);
-      this.walletData.tokens.splice(index, 1);
+      for (let index = 0; index < this.walletData.tokens.length; index++) {
+        if (this.walletData.tokens[index].id === token.id) {
+          this.walletData.tokens.splice(index, 1);
+          break;
+        }
+      }
     })
   }
 
@@ -149,6 +137,15 @@ export class WalletPage {
     this.storageUtil.removeWallet(this.walletData.id).then((wallet: Wallet) => {
       this.event.publish('wallet.removed', wallet);
       this.navCtrl.goToRoot({});
+    });
+  }
+
+  protected gotoSendETH() {
+    this.navCtrl.push(SendEthPage, {
+      ethInfo: {
+        address: this.walletData.address,
+        privateKey: this.walletData.privateKey
+      }
     });
   }
 
@@ -186,6 +183,14 @@ export class WalletPage {
       walletAddress: this.walletData.address,
       callback: this.addTokenCallbackFunction
     });
+  }
+
+  protected gotoCreateContract() {
+    this.navCtrl.push(ContractTemplatesPage, {
+      walletId: this.walletData.id,
+      walletAddress: this.walletData.address,
+      walletKey: this.walletData.privateKey
+    })
   }
 
 }

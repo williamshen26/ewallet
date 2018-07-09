@@ -9,6 +9,7 @@ import { WalletPage } from '../pages/wallet/wallet';
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { SendTokenPage } from '../pages/send-token/send-token';
 import { ReceiveTokenPage } from '../pages/receive-token/receive-token'
+import { SendEthPage } from '../pages/send-eth/send-eth';
 import { AddTokenPage } from '../pages/add-token/add-token'
 import { TransactionHistoryPage } from '../pages/transaction-history/transaction-history'
 import { ItemDetailsPage } from '../pages/item-details/item-details';
@@ -26,6 +27,9 @@ import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawe
 
 import { ComponentsModule } from '../components/components-module'
 import { PipeModule } from '../pipes/pipes-module'
+import {ContractTemplatesPage} from "../pages/contract-templates/contract-templates";
+import {HttpClientModule} from "@angular/common/http";
+import {ContractFormPage} from "../pages/contract-form/contract-form";
 
 @NgModule({
   declarations: [
@@ -33,9 +37,12 @@ import { PipeModule } from '../pipes/pipes-module'
     HelloIonicPage,
     SendTokenPage,
     ReceiveTokenPage,
+    SendEthPage,
     AddTokenPage,
     TransactionHistoryPage,
     WalletPage,
+    ContractTemplatesPage,
+    ContractFormPage,
     ItemDetailsPage,
     ListPage
   ],
@@ -44,6 +51,7 @@ import { PipeModule } from '../pipes/pipes-module'
     PipeModule,
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     MatButtonModule,
     MatCheckboxModule,
     MatInputModule,
@@ -63,9 +71,12 @@ import { PipeModule } from '../pipes/pipes-module'
     HelloIonicPage,
     SendTokenPage,
     ReceiveTokenPage,
+    SendEthPage,
     AddTokenPage,
     TransactionHistoryPage,
     WalletPage,
+    ContractTemplatesPage,
+    ContractFormPage,
     ItemDetailsPage,
     ListPage
   ],

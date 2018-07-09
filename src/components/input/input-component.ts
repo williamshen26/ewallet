@@ -56,6 +56,12 @@ export class InputComponent {
   @Input()
   public name: string;
 
+  @Input()
+  public maxLength: number;
+
+  @Input()
+  public upperCase: boolean = false;
+
   @Output()
   public estimateGas = new EventEmitter();
 

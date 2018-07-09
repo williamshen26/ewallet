@@ -208,4 +208,37 @@ export class StorageUtil {
       });
     });
   }
+
+  public updateContractTemplates(templates){
+
+    this.storage.set('templates', templates);
+
+  }
+
+  public getContractTemplateById(id: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.storage.get('templates').then((templates: any) => {
+        if (!templates) {
+          reject();
+        }
+        for (let template of templates.templates) {
+          if (template.id == id) {
+            resolve(template);
+          }
+        }
+        reject();
+      })
+    });
+  }
+
+  public getContractTemplates(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.storage.get('templates').then((templates: any) => {
+        if (!templates) {
+          resolve({templates: []});
+        }
+        resolve(templates);
+      })
+    });
+  }
 }

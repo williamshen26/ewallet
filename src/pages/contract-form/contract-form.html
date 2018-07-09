@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{template.title}}</ion-title>
+  </ion-navbar>
+
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
+</ion-header>
+
+<ion-content padding>
+  <div class="success growl" *ngIf="paymentSuccessful">
+    <div class="growl-icon">
+      <fa class="state-icon" [name]="'check'"></fa>
+    </div>
+    <div class="growl-content">
+      <div class="growl-title">
+        Payment sent successfully, thank you! Now generating contract...
+      </div>
+      <div class="growl-message">
+        {{receipt}}
+        <fa [name]="'copy'" (click)="copyHash(receipt)"></fa>
+      </div>
+    </div>
+  </div>
+
+  <div class="success growl" *ngIf="contractSuccessful">
+    <div class="growl-icon">
+      <fa class="state-icon" [name]="'check'"></fa>
+    </div>
+    <div class="growl-content">
+      <div class="growl-title">
+        Contract generation successful!
+      </div>
+      <div class="growl-message">
+        {{contractAddress}}
+        <fa [name]="'copy'" (click)="copyHash(contractAddress)"></fa>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-item" *ngFor="let item of template.form.items">
+    <wa-input
+      [id]="item.id"
+      [name]="item.id"
+      [label]="item.label"
+      [type]="item.type"
+      [maxLength]="item.maxLength"
+      [upperCase]="item.upperCase"
+      [control]="contractForm.controls[item.id]">
+    </wa-input>
+  </div>
+
+
+  <div class="form-item">
+    <button mat-raised-button class="wallet-button" color="primary" (click)="startGenerateContract()" *ngIf="contractForm" [disabled]="isLoading || contractForm.invalid" >Next!</button>
+  </div>
+</ion-content>

@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import {Platform, MenuController, Nav, Events} from 'ionic-angular';
 
@@ -9,6 +10,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { Wallet } from '../models/wallet-model';
 import { StorageUtil } from "../utils/storage.util";
+
+import * as globals from '../utils/global.util';
 
 
 @Component({
@@ -27,6 +30,7 @@ export class MyApp {
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     private storageUtil: StorageUtil,
+    private http: HttpClient,
     private event: Events
   ) {
     this.initializeApp();
@@ -79,6 +83,16 @@ export class MyApp {
       }
 
     });
+
+    // Get contract templates
+    this.http.get(globals.contractGenerateApi + 'contract-templates').subscribe(
+      (json) => {
+        this.storageUtil.updateContractTemplates(json);
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
   }
 
   initializeApp() {

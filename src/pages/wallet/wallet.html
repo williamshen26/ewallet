@@ -5,17 +5,22 @@
     </button>
     <ion-title>{{walletData.name}}</ion-title>
     <ion-buttons end>
-      <button mat-icon-button (click)="gotoAddToken()">
+      <button mat-icon-button [matMenuTriggerFor]="plusMenu">
         <fa class="add-button" [name]="'plus'"></fa>
       </button>
-      <button mat-icon-button [matMenuTriggerFor]="menu">
+      <button mat-icon-button [matMenuTriggerFor]="ellipsisMenu">
         <fa [name]="'ellipsis-v'"></fa>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<mat-menu #menu="matMenu">
+
+<mat-menu #plusMenu="matMenu">
+  <button mat-menu-item (click)="gotoAddToken()">Add Token</button>
+  <button mat-menu-item (click)="gotoCreateContract()">Create Contract</button>
+</mat-menu>
+<mat-menu #ellipsisMenu="matMenu">
   <button mat-menu-item (click)="readyRemoveWallet()">Remove Wallet</button>
 </mat-menu>
 
@@ -30,6 +35,15 @@
       </div>
       <div class="wallet-address">
         <p>{{walletData.address}}</p>
+      </div>
+      <div class="wallet-control">
+        <a href="#" (click)="gotoSendETH()">
+          <fa [name]="'arrow-up'"></fa> Send
+        </a>
+
+        <a href="#" (click)="gotoReceiveToken(walletData.address)">
+          <fa [name]="'arrow-down'"></fa> Receive
+        </a>
       </div>
     </div>
   </div>
@@ -49,22 +63,6 @@
     ></wa-token>
   </div>
 
-
-  <!--<mat-accordion>-->
-    <!--<mat-expansion-panel>-->
-      <!--<mat-expansion-panel-header>-->
-        <!--<mat-panel-title>-->
-          <!--<fa [name]="'plus-square'"></fa>-->
-          <!--Create Token-->
-        <!--</mat-panel-title>-->
-      <!--</mat-expansion-panel-header>-->
-
-      <!--<div class="form-item">-->
-        <!--<button mat-raised-button class="wallet-button" color="primary" (click)="createToken()">Create Token</button>-->
-      <!--</div>-->
-
-    <!--</mat-expansion-panel>-->
-  <!--</mat-accordion>-->
 
 </ion-content>
 
