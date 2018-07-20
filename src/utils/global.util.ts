@@ -8,4 +8,5 @@ export const network = 'https://api.myetherapi.com/rop';
 export const contractAddress = '0x3c2110ae4a729c8f19479219d7263db3856d0e5e';
 
 // export const contractGenerateApi = 'http://localhost:8080/';
-export const contractGenerateApi = 'http://108.172.199.241:8080/';
+// export const contractGenerateApi = 'http://108.172.199.241:8080/';
+export const contractGenerateApi = 'http://ec2-52-33-149-46.us-west-2.compute.amazonaws.com:8080/';
