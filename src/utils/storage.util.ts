@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import uuid from 'uuid/index.js'
-import { Wallet } from '../models/wallet-model';
+import {Wallet, EosWallet} from '../models/wallet-model';
 import {Contact} from '../models/contact-model';
 import {Token} from '../models/token-model';
 
@@ -16,6 +16,11 @@ export class StorageUtil {
     this.storage.get('wallets').then((wallets: Wallet[]) => {
       wallets = [];
       this.storage.set('wallets', wallets);
+    });
+
+    this.storage.get('eosWallets').then((wallets: EosWallet[]) => {
+      wallets = [];
+      this.storage.set('eosWallets', wallets);
     });
 
     this.storage.get('tokens').then((tokens: Token[]) => {
@@ -35,6 +40,18 @@ export class StorageUtil {
         if (!wallets) {
           wallets = [];
           this.storage.set('wallets', wallets);
+        }
+        resolve(wallets);
+      });
+    });
+  }
+
+  public getEosWallets(): Promise<EosWallet[]> {
+    return new Promise((resolve, reject) => {
+      this.storage.get('eosWallets').then((wallets: EosWallet[]) => {
+        if (!wallets) {
+          wallets = [];
+          this.storage.set('eosWallets', wallets);
         }
         resolve(wallets);
       });
@@ -111,6 +128,56 @@ export class StorageUtil {
       });
     });
   }
+
+
+  public addEosWallet(wallet: EosWallet): Promise<any> {
+    return new Promise((resolve, reject) => {
+
+      this.storage.get('eosWallets').then((wallets: EosWallet[]) => {
+        wallet.id = uuid();
+        wallets.push(wallet);
+        this.storage.set('eosWallets', wallets);
+        resolve();
+      });
+
+    });
+  }
+
+  public getEosWallet(walletId: string): Promise<EosWallet> {
+    return new Promise((resolve, reject) => {
+      this.storage.get('eosWallets').then((wallets: EosWallet[]) => {
+        for (let wallet of wallets) {
+          if (wallet.id === walletId) {
+            resolve(wallet);
+
+            break;
+          }
+        }
+        reject();
+      });
+    });
+  }
+
+  public removeEosWallet(walletId: string): Promise<EosWallet> {
+    return new Promise((resolve, reject) => {
+      this.storage.get('eosWallets').then((wallets: EosWallet[]) => {
+        for (let wallet of wallets) {
+          if (wallet.id === walletId) {
+            let index = wallets.indexOf(wallet);
+            wallets.splice(index, 1);
+
+            this.storage.set('eosWallets', wallets);
+
+            resolve(wallet);
+
+            break;
+          }
+        }
+      });
+    });
+  }
+
+
 
   public addContact(contact: Contact): Promise<any> {
     return new Promise((resolve, reject) => {

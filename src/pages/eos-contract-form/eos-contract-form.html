@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Create Token</ion-title>
+  </ion-navbar>
+
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div class="success growl" *ngIf="isSuccessful">
+    <div class="growl-icon">
+      <fa class="state-icon" [name]="'check'"></fa>
+    </div>
+    <div class="growl-content">
+      <div class="growl-title">
+        EOS Token create successfully.
+      </div>
+      <div class="growl-message">
+        ownderAddress: {{ownerAddress}} <br/>
+        ownerKey: {{ownerKey}} <br/>
+        activeAddress: {{activeAddress}} <br/>
+        activeKey: {{activeKey}} <br/>
+        <fa [name]="'copy'" (click)="copyHash()"></fa>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-item">
+    <wa-input
+      [id]="'code'"
+      [name]="'code'"
+      [label]="'Code'"
+      [type]="['text']"
+      [maxLength]="12"
+      [control]="eosCreateForm.controls['code']">
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <wa-input
+      [id]="'symbol'"
+      [name]="'symbol'"
+      [label]="'Symbol'"
+      [type]="['text']"
+      [maxLength]="6"
+      [upperCase]="true"
+      [control]="eosCreateForm.controls['symbol']">
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <wa-input
+      [id]="'maxSupply'"
+      [name]="'maxSupply'"
+      [label]="'Max Supply'"
+      [type]="'number'"
+      [control]="eosCreateForm.controls['maxSupply']" >
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <wa-input
+      [id]="'eosForRAM'"
+      [name]="'eosForRAM'"
+      [label]="'EOS For RAM'"
+      [type]="'number'"
+      [control]="eosCreateForm.controls['eosForRAM']" >
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <wa-input
+      [id]="'eosForCPU'"
+      [name]="'eosForCPU'"
+      [label]="'EOS for CPU'"
+      [type]="'number'"
+      [control]="eosCreateForm.controls['eosForCPU']" >
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <wa-input
+      [id]="'eosForBW'"
+      [name]="'eosForBW'"
+      [label]="'EOS for BW'"
+      [type]="'number'"
+      [control]="eosCreateForm.controls['eosForBW']" >
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <button mat-raised-button class="wallet-button" color="primary" (click)="readyCreateToken()" [disabled]="eosCreateForm.invalid || isLoading">Create Token</button>
+  </div>
+</ion-content>

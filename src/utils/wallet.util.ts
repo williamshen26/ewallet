@@ -42,4 +42,8 @@ export class WalletUtil {
     }
     return x;
   }
+
+  public ab2str(buf) {
+    return String.fromCharCode.apply(null, new Uint8Array(buf));
+  }
 }

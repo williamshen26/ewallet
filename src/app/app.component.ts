@@ -8,10 +8,11 @@ import { WalletPage } from '../pages/wallet/wallet';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
-import { Wallet } from '../models/wallet-model';
+import {Wallet, EosWallet} from '../models/wallet-model';
 import { StorageUtil } from "../utils/storage.util";
 
 import * as globals from '../utils/global.util';
+import {EosWalletPage} from "../pages/eos-wallet/eos-wallet";
 
 
 @Component({
@@ -48,12 +49,23 @@ export class MyApp {
       }
     });
 
+    this.storageUtil.getEosWallets().then((wallets: EosWallet[]) => {
+      for (let wallet of wallets) {
+        this.pages.push({title: wallet.name, component: EosWalletPage, data: wallet, type: 'wallet'})
+      }
+    });
+
     this.storageUtil.getTokens();
     this.storageUtil.getContacts();
 
-    this.event.subscribe('wallet.created', (wallet: Wallet) => {
+    this.event.subscribe('eth.wallet.created', (wallet: Wallet) => {
       console.log('create wallet', wallet);
       this.pages.push({title: wallet.name, component: WalletPage, data: wallet, type: 'wallet'})
+    });
+
+    this.event.subscribe('eos.wallet.created', (wallet: EosWallet) => {
+      console.log('create wallet', wallet);
+      this.pages.push({title: wallet.name, component: EosWalletPage, data: wallet, type: 'wallet'})
     });
 
     this.event.subscribe('wallet.removed', (wallet: Wallet) => {

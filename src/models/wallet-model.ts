@@ -15,3 +15,12 @@ export class Wallet {
     this.tokens = [];
   }
 }
+
+export class EosWallet extends Wallet {
+  public account: string;
+
+  constructor() {
+    super();
+    this.account = null;
+  }
+}

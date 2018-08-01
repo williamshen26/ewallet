@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{walletData.name}}</ion-title>
+    <ion-buttons end>
+      <button mat-icon-button [matMenuTriggerFor]="plusMenu">
+        <fa class="add-button" [name]="'plus'"></fa>
+      </button>
+      <button mat-icon-button [matMenuTriggerFor]="ellipsisMenu">
+        <fa [name]="'ellipsis-v'"></fa>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<mat-menu #plusMenu="matMenu">
+  <button mat-menu-item (click)="gotoCreateContract()">Create Token</button>
+</mat-menu>
+<mat-menu #ellipsisMenu="matMenu">
+  <button mat-menu-item (click)="readyRemoveWallet()">Remove Wallet</button>
+</mat-menu>
+
+<ion-content no-padding>
+
+  <div class="wallet-top-section">
+    <div class="wallet-info">
+      <div class="wallet-balance">
+        <wa-data [data]="walletBalance" [status]="walletBalanceStatus"></wa-data>
+        <fa class="refresh-button" [name]="'refresh'" (click)="getBalance()"></fa>
+      </div>
+      <div class="wallet-address">
+        <p>{{walletData.account}}</p>
+      </div>
+      <div class="wallet-control">
+        <a href="#" (click)="gotoSendEos()">
+          <fa [name]="'arrow-up'"></fa> Send
+        </a>
+
+        <a href="#" (click)="gotoReceiveToken(walletData.address)">
+          <fa [name]="'arrow-down'"></fa> Receive
+        </a>
+      </div>
+    </div>
+  </div>
+</ion-content>

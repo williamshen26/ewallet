@@ -6,10 +6,13 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { MyApp } from './app.component';
 
 import { WalletPage } from '../pages/wallet/wallet';
+import { EosWalletPage } from '../pages/eos-wallet/eos-wallet';
+import { EosContractFormPage } from '../pages/eos-contract-form/eos-contract-form';
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { SendTokenPage } from '../pages/send-token/send-token';
 import { ReceiveTokenPage } from '../pages/receive-token/receive-token'
 import { SendEthPage } from '../pages/send-eth/send-eth';
+import { SendEosPage } from '../pages/send-eos/send-eos';
 import { AddTokenPage } from '../pages/add-token/add-token'
 import { TransactionHistoryPage } from '../pages/transaction-history/transaction-history'
 import { ItemDetailsPage } from '../pages/item-details/item-details';
@@ -38,9 +41,12 @@ import {ContractFormPage} from "../pages/contract-form/contract-form";
     SendTokenPage,
     ReceiveTokenPage,
     SendEthPage,
+    SendEosPage,
     AddTokenPage,
     TransactionHistoryPage,
     WalletPage,
+    EosWalletPage,
+    EosContractFormPage,
     ContractTemplatesPage,
     ContractFormPage,
     ItemDetailsPage,
@@ -72,9 +78,12 @@ import {ContractFormPage} from "../pages/contract-form/contract-form";
     SendTokenPage,
     ReceiveTokenPage,
     SendEthPage,
+    SendEosPage,
     AddTokenPage,
     TransactionHistoryPage,
     WalletPage,
+    EosWalletPage,
+    EosContractFormPage,
     ContractTemplatesPage,
     ContractFormPage,
     ItemDetailsPage,

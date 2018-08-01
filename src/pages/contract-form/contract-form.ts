@@ -13,7 +13,7 @@ import {HttpClient} from "@angular/common/http";
 import {HttpHeaders} from "@angular/common/http";
 import {ContactGenerate} from "../../models/contract-generate-model";
 
-export const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
+const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
 
 @Component({
   selector: 'contract-form',
