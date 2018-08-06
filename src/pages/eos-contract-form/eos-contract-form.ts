@@ -70,7 +70,7 @@ export class EosContractFormPage {
 
   private createEosCreateFormGroup(model: EosCreate = new EosCreate()): FormGroup {
     return this.fb.group({
-      'code': new FormControl(model.code, [Validators.required]),
+      'code': new FormControl(model.code, [Validators.required, CryptoValidators.eosAccountlIsValid]),
       'symbol': new FormControl(model.symbol, Validators.required),
       'decimals': new FormControl(model.decimals, [Validators.required, CryptoValidators.eosDecimalNotTooLarge]),
       'maxSupply': new FormControl(model.maxSupply, Validators.required),

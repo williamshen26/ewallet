@@ -121,7 +121,44 @@ export class CryptoValidators {
       valid = false;
     }
 
-    return valid ? null : {eosPrivateKeyInvalid: true};
+    return valid ? null : {eosAssetInvalid: true};
+  }
+
+  public static eosSymbolIsValid(control: FormControl) {
+    if (!control || control.value == null) {
+      return;
+    }
+
+    let value: string = control.value;
+
+    let valid: boolean = true;
+
+    try {
+      let asset = Eos['modules']['format']['parseAsset'](value);
+
+      console.log(asset);
+
+      if(asset.amount || !asset.symbol || asset.code) {
+        valid = false;
+      }
+
+    } catch (err) {
+      valid = false;
+    }
+
+    return valid ? null : {eosSymbolInvalid: true};
+  }
+
+  public static eosAccountlIsValid(control: FormControl) {
+    if (!control || control.value == null) {
+      return;
+    }
+
+    let value: string = control.value;
+
+    let valid: boolean = Eos['modules']['format']['isName'](value);
+
+    return valid ? null : {eosAccountInvalid: true};
   }
 
   public static eosDecimalNotTooLarge(control: FormControl) {

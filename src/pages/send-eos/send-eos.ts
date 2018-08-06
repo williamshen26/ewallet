@@ -9,6 +9,7 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import { Clipboard } from '@ionic-native/clipboard';
 
 import Eos from 'eosjs/lib/index.js';
+import {CryptoValidators} from "../../validators/crypto-validator";
 
 let config = Object.assign({}, globals.eosConfig);
 let eos = Eos(config);
@@ -53,7 +54,7 @@ export class SendEosPage {
 
   private creatTokenTransactionFormGroup(model: TokenTransaction = new TokenTransaction()): FormGroup {
     return this.fb.group({
-      'to': new FormControl(model.to, [Validators.required]),
+      'to': new FormControl(model.to, [Validators.required, CryptoValidators.eosAccountlIsValid]),
       'amount': new FormControl(model.amount, Validators.required)
     });
   }

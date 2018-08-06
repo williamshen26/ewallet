@@ -57,7 +57,7 @@ export class EosActionFormPage {
       switch (field.type) {
         case 'account_name':
           field.inputType = ['text', 'qr'];
-          // validators.push(CryptoValidators.eosPrivateKeyIsValid);
+          validators.push(CryptoValidators.eosAccountlIsValid);
           break;
         case 'asset':
           field.inputType = ['text'];

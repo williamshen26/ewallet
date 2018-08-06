@@ -17,6 +17,7 @@
 
 <mat-menu #plusMenu="matMenu">
   <button mat-menu-item (click)="gotoCreateContract()">Create Token</button>
+  <button mat-menu-item (click)="gotoAddToken()">Add Token</button>
 </mat-menu>
 <mat-menu #ellipsisMenu="matMenu">
   <button mat-menu-item (click)="readyRemoveWallet()">Remove Wallet</button>
@@ -32,6 +33,15 @@
       </div>
       <div class="wallet-address">
         <p>{{walletData.account}}</p>
+      </div>
+      <div class="wallet-data">
+        <label>CPU </label> {{cpuUsed}} ms / {{cpuMax}} ms
+      </div>
+      <div class="wallet-data">
+        <label>Bandwidth </label> {{bwUsed}} KiB / {{bwMax}} KiB
+      </div>
+      <div class="wallet-data">
+        <label>RAM </label> {{ramUsed}} KiB / {{ramMax}} KiB
       </div>
       <div class="wallet-control">
         <a href="#" (click)="gotoSendEos()">
@@ -53,6 +63,7 @@
       [symbol]="token.symbol"
       [walletAccount]="walletData.account"
       [walletPrivateKey]="walletData.privateKey"
+      (onRemoveToken)="readyRemoveToken($event)"
     ></wa-eos-token>
   </div>
 

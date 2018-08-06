@@ -1,4 +1,4 @@
-import {OnInit, Component, Input} from "@angular/core";
+import {OnInit, Component, Input, EventEmitter, Output} from "@angular/core";
 import * as globals from '../../utils/global.util';
 import Eos from 'eosjs/lib/index.js';
 import {NavController} from "ionic-angular";
@@ -24,6 +24,9 @@ export class EosTokenComponent implements OnInit {
   private walletAccount: string;
   @Input()
   private walletPrivateKey: string;
+
+  @Output()
+  public onRemoveToken = new EventEmitter();
 
   protected tokenBalance: string;
   protected tokenBalanceStatus: string = 'pending';
@@ -69,5 +72,9 @@ export class EosTokenComponent implements OnInit {
       address: this.walletAccount,
       walletName: this.walletAccount
     });
+  }
+
+  protected removeToken() {
+    this.onRemoveToken.emit(this.tokenId);
   }
 }
