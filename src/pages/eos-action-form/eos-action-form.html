@@ -3,14 +3,12 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Send {{symbol}}</ion-title>
+    <ion-title>{{actionName}}</ion-title>
   </ion-navbar>
 
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
 
 </ion-header>
-
-
 <ion-content padding>
   <div class="success growl" *ngIf="isSuccessful">
     <div class="growl-icon">
@@ -18,7 +16,7 @@
     </div>
     <div class="growl-content">
       <div class="growl-title">
-        {{symbol}} sent successfully.
+        Action completed successfully.
       </div>
       <div class="growl-message">
         {{receipt}}
@@ -33,7 +31,7 @@
     </div>
     <div class="growl-content">
       <div class="growl-title">
-        {{symbol}} failed to send.
+        Action failed.
       </div>
       <div>
         {{receipt}}
@@ -41,28 +39,19 @@
     </div>
   </div>
 
-  <div class="form-item">
+  <div class="form-item" *ngFor="let field of fields">
     <wa-input
-      [id]="'to'"
-      [name]="'to'"
-      [label]="'To'"
-      [type]="['qr', 'list']"
-      [control]="tokenTransactionForm.controls['to']"
-      (onShowList)="showContactList()" >
+      [id]="field.name"
+      [name]="field.name"
+      [label]="field.name"
+      [type]="field.inputType"
+      [upperCase]="field.upperCase"
+      [control]="actionForm.controls[field.name]">
     </wa-input>
   </div>
 
   <div class="form-item">
-    <wa-input
-      [id]="'amount'"
-      [name]="'amount'"
-      [label]="'Amount'"
-      [type]="'number'"
-      [control]="tokenTransactionForm.controls['amount']" >
-    </wa-input>
+    <button mat-raised-button class="wallet-button" color="primary" (click)="readyAction()" *ngIf="actionForm" [disabled]="isLoading || actionForm.invalid" >Next!</button>
   </div>
 
-  <div class="form-item">
-    <button mat-raised-button class="wallet-button" color="primary" (click)="sendEos()" [disabled]="tokenTransactionForm.invalid || isLoading">Send Token</button>
-  </div>
 </ion-content>

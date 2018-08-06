@@ -1,4 +1,5 @@
-import {Token} from './token-model';
+import {Token, EosToken} from './token-model';
+import {EosContract} from "./eos-contract-model";
 
 export class Wallet {
   public id: string;
@@ -16,11 +17,22 @@ export class Wallet {
   }
 }
 
-export class EosWallet extends Wallet {
+export class EosWallet {
+  public id: string;
+  public name: string;
+  public address: string;
+  public privateKey: string;
   public account: string;
+  public contracts: EosContract[];
+  public tokens: EosToken[];
 
   constructor() {
-    super();
+    this.id = null;
+    this.name = null;
+    this.address = null;
+    this.privateKey = null;
     this.account = null;
+    this.contracts = [];
+    this.tokens = [];
   }
 }

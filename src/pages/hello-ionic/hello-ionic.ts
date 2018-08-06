@@ -17,7 +17,6 @@ import {Clipboard} from "@ionic-native/clipboard";
 export const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
 import Eos from 'eosjs/lib/index.js';
 import ecc from 'eosjs-ecc/lib/index.js';
-import {HttpClient} from "@angular/common/http";
 
 let config = Object.assign({}, globals.eosConfig);
 let eos = Eos(config);
@@ -57,7 +56,6 @@ export class HelloIonicPage {
     private zone: NgZone,
     private platform: Platform,
     private clipboard: Clipboard,
-    private http: HttpClient,
     private snackBar: MatSnackBar
   ) {
 
@@ -67,7 +65,7 @@ export class HelloIonicPage {
   }
 
   protected createEosWallet() {
-    this.eosWalletForm.controls['address'].setValue(ecc.PrivateKey(this._eosWalletModel.privateKey).toPublic().toString());
+    this.eosWalletForm.controls['address'].setValue(ecc['PrivateKey'](this._eosWalletModel.privateKey).toPublic().toString());
     this.eosWalletForm.controls['address'].updateValueAndValidity();
 
     eos.getKeyAccounts(this._eosWalletModel.address).then((account) => {
@@ -136,7 +134,7 @@ export class HelloIonicPage {
   }
 
   protected readyRemoveContact(contactId: string) {
-    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    let dialogRef = this.dialog['open'](ConfirmDialogComponent, {
       width: '500px',
       data: {
         message: 'Are you sure you want to remove this contact?'
@@ -170,7 +168,7 @@ export class HelloIonicPage {
   }
 
   protected readyResetWallet() {
-    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    let dialogRef = this.dialog['open'](ConfirmDialogComponent, {
       width: '500px',
       data: {
         message: 'Are you sure you want to reset the wallet?'
@@ -242,7 +240,7 @@ export class HelloIonicPage {
       'name': new FormControl(eosModel.name, Validators.required),
       'account': new FormControl(eosModel.account, []),
       'address': new FormControl(eosModel.address, []),
-      'privateKey': new FormControl(eosModel.privateKey, [Validators.required])
+      'privateKey': new FormControl(eosModel.privateKey, [Validators.required, CryptoValidators.eosPrivateKeyIsValid])
     });
   }
 

@@ -91,13 +91,11 @@ export class ContractFormPage {
       formGroup[item.id] = new FormControl('', validators);
     }
 
-    console.log(formGroup);
-
     return this.fb.group(formGroup);
   }
 
   protected startGenerateContract() {
-    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    let dialogRef = this.dialog['open'](ConfirmDialogComponent, {
       width: '500px',
       data: {
         message: 'Proceed generating contract? A fee of ' + this.template.cost + ' ETH will be applied.'

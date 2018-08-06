@@ -1,0 +1,40 @@
+<mat-accordion>
+  <mat-expansion-panel (opened)="onOpen()">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <fa [name]="'database'"></fa>
+        {{symbol}}
+      </mat-panel-title>
+      <!--<mat-panel-description>-->
+      <!--Type your name and age-->
+      <!--</mat-panel-description>-->
+    </mat-expansion-panel-header>
+
+
+    <div class="form-item top-section">
+      <div class="balance-section" (click)="getTokenBalance()">
+        <wa-data [data]="tokenBalance" [status]="tokenBalanceStatus"></wa-data>
+        <fa class="refresh-button" [name]="'refresh'"></fa>
+      </div>
+      <div class="control-section">
+        <a href="#" (click)="gotoSendToken()">
+          <fa [name]="'arrow-up'"></fa> Send
+        </a>
+
+        <a href="#" (click)="gotoReceiveToken()">
+          <fa [name]="'arrow-down'"></fa> Receive
+        </a>
+
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <fa [name]="'ellipsis-v'"></fa>
+        </button>
+
+      </div>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="removeToken()">Remove Token</button>
+      </mat-menu>
+    </div>
+
+  </mat-expansion-panel>
+</mat-accordion>

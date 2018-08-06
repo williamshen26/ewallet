@@ -120,7 +120,7 @@ export class SendEthPage {
   }
 
   protected showContactList() {
-    let dialogRef = this.dialog.open(ContactListComponent, {
+    let dialogRef = this.dialog['open'](ContactListComponent, {
       width: '900px',
       data: { }
     });

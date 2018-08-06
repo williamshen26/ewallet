@@ -21,6 +21,7 @@ let eos = Eos(config);
 })
 export class EosWalletPage {
   private walletData: EosWallet = new EosWallet();
+  private walletDataId: string;
   protected walletBalance: string;
   protected walletBalanceStatus: string = 'pending';
 
@@ -35,19 +36,22 @@ export class EosWalletPage {
               private platform: Platform
   ) {
 
-    let walletDataId = navParams.get('data')['id'];
+    this.walletDataId = navParams.get('data')['id'];
 
+  }
+
+  private loadWallet(walletDataId: string) {
     this.storageUtil.getEosWallet(walletDataId).then((wallet: EosWallet) => {
       this.walletData = wallet;
-      config.keyProvider.push(this.walletData.privateKey);
+      config.keyProvider = [this.walletData.privateKey];
 
       this.getBalance();
     }).catch((e) => {
+      console.log(e);
       this.snackBar.open('there is an error loading your wallet', 'Dismiss', {
         duration: 2000,
       });
     });
-
   }
 
   protected getBalance() {
@@ -65,7 +69,7 @@ export class EosWalletPage {
   protected gotoReceiveToken(account: string) {
     this.navCtrl.push(ReceiveTokenPage, {
       address: account,
-      walletName: this.walletData.name
+      walletName: account
     });
   }
 
@@ -79,7 +83,7 @@ export class EosWalletPage {
   }
 
   protected readyRemoveWallet() {
-    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    let dialogRef = this.dialog['open'](ConfirmDialogComponent, {
       width: '500px',
       data: {
         message: 'Are you sure you want to remove this wallet?'
@@ -113,9 +117,14 @@ export class EosWalletPage {
   protected gotoCreateContract() {
     this.navCtrl.push(EosContractFormPage, {
       eosInfo: {
+        walletId: this.walletData.id,
         account: this.walletData.account,
         privateKey: this.walletData.privateKey
       }
     })
+  }
+
+  protected ionViewWillEnter() {
+    this.loadWallet(this.walletDataId);
   }
 }

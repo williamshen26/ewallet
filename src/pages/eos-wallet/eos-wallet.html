@@ -38,10 +38,31 @@
           <fa [name]="'arrow-up'"></fa> Send
         </a>
 
-        <a href="#" (click)="gotoReceiveToken(walletData.address)">
+        <a href="#" (click)="gotoReceiveToken(walletData.account)">
           <fa [name]="'arrow-down'"></fa> Receive
         </a>
       </div>
     </div>
+  </div>
+
+
+  <div *ngFor="let token of walletData.tokens">
+    <wa-eos-token
+      [tokenId]="token.id"
+      [account]="token.code"
+      [symbol]="token.symbol"
+      [walletAccount]="walletData.account"
+      [walletPrivateKey]="walletData.privateKey"
+    ></wa-eos-token>
+  </div>
+
+  <div *ngFor="let contract of walletData.contracts">
+    <wa-eos-contract
+      [contractId]="contract.id"
+      [account]="contract.account"
+      [privateKey]="contract.activeKey"
+      [walletAccount]="walletData.account"
+      [walletPrivateKey]="walletData.privateKey"
+    ></wa-eos-contract>
   </div>
 </ion-content>

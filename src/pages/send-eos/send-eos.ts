@@ -3,30 +3,33 @@ import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
 import {TokenTransaction} from '../../models/token-transaction-model';
 import {WalletUtil} from '../../utils/wallet.util';
 import * as globals from '../../utils/global.util';
-import {CryptoValidators} from '../../validators/crypto-validator';
 import {NavParams, Platform} from 'ionic-angular';
 import {ContactListComponent} from '../../components/contact-list/contact-list-component';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import { Clipboard } from '@ionic-native/clipboard';
 
-import ecc from 'eosjs-ecc/lib/index.js';
 import Eos from 'eosjs/lib/index.js';
 
+let config = Object.assign({}, globals.eosConfig);
+let eos = Eos(config);
 
 @Component({
   selector: 'send-eos',
   templateUrl: 'send-eos.html'
 })
 export class SendEosPage {
-  private eos: Eos;
-
   private eosInfo: any;
   private account: string;
   private privateKey: string;
+  private code: string;
+  private symbol: string;
+  private decimals: number;
+
   private receipt: string;
 
   protected isLoading: boolean = false;
   protected isSuccessful: boolean = false;
+  protected isFailed: boolean = false;
 
   private tokenTransactionForm: FormGroup;
   private _model: TokenTransaction = new TokenTransaction();
@@ -59,36 +62,33 @@ export class SendEosPage {
     this.isLoading = true;
     this.tokenTransactionForm.disable();
 
-    //TODO
-    this.eos.transaction(
-      {
-        // ...headers,
-        actions: [
-          {
-            account: 'eosio.token',
-            name: 'transfer',
-            authorization: [{
-              actor: this.account,
-              permission: 'owner'
-            }],
-            data: {
-              from: this.account,
-              to: this._model.to,
-              quantity: this._model.amount + ' EOS',
-              memo: ''
-            }
-          }
-        ]
-      }
-    ).then((result) => {
-      console.log(result);
-    }).catch((err) => {
-      console.log(err);
-    });
+    eos.contract(this.code)
+      .then(myaccount => myaccount['transfer']({
+          from: this.account,
+          to: this._model.to,
+          quantity: parseFloat(this.walletUtil.toFixed(this._model.amount)).toFixed(this.decimals) + ' ' + this.symbol,
+          memo: ''
+        }, {authorization: this.account})
+        .then((result) => {
+          this.zone.run(() => {
+            this.isLoading = false;
+            this.tokenTransactionForm.enable();
+            this.receipt = result['transaction_id'];
+            this.isSuccessful = true;
+          });
+        })
+        .catch((err) => {
+          this.isLoading = false;
+          this.tokenTransactionForm.enable();
+          this.receipt = (JSON.parse(err)['error']['details'].length > 0) ? JSON.parse(err)['error']['details'][0]['message'] : JSON.parse(err)['error']['what'];
+          this.isFailed = true;
+        })
+      );
+
   }
 
   protected showContactList() {
-    let dialogRef = this.dialog.open(ContactListComponent, {
+    let dialogRef = this.dialog['open'](ContactListComponent, {
       width: '900px',
       data: { }
     });
@@ -121,20 +121,18 @@ export class SendEosPage {
 
     this.account = this.eosInfo['account'];
     this.privateKey = this.eosInfo['privateKey'];
+    this.code = this.eosInfo['code'] ? this.eosInfo['code'] : 'eosio.token';
+    this.symbol = this.eosInfo['symbol'] ? this.eosInfo['symbol'] : 'EOS';
+
+    eos.getCurrencyStats(this.code, this.symbol)
+      .then((stats) => {
+        let asset = Eos['modules']['format']['parseAsset']( stats[this.symbol]['max_supply'] );
+        this.decimals = asset.precision;
+      });
 
     this.buildForm();
 
-    let config = {
-      chainId: null, // 32 byte (64 char) hex string
-      keyProvider: [this.privateKey], // WIF string or array of keys..
-      httpEndpoint: globals.eosNetwork,
-      expireInSeconds: 60,
-      broadcast: true,
-      verbose: false, // API activity
-      sign: true
-    };
-
-    this.eos = Eos(config);
+    config.keyProvider.push(this.privateKey);
 
   }
 

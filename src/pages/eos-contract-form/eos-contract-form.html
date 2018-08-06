@@ -12,20 +12,53 @@
 
 
 <ion-content padding>
+  <div class="process growl" *ngIf="accountCreateSuccessful">
+    <div class="growl-icon">
+      <fa class="state-icon" [name]="'hourglass'"></fa>
+    </div>
+    <div class="growl-content">
+      <div class="growl-title">
+        EOS account generate successfully.
+      </div>
+      <div class="growl-message">
+        ownderAddress: {{contract.ownerAddress}} <br/>
+        ownerKey: {{contract.ownerKey}} <br/>
+        activeAddress: {{contract.activeAddress}} <br/>
+        activeKey: {{contract.activeKey}} <br/>
+        <fa [name]="'copy'" (click)="copyHash()"></fa>
+      </div>
+    </div>
+  </div>
+
+  <div class="process growl" *ngIf="contractDeploySuccessful">
+    <div class="growl-icon">
+      <fa class="state-icon" [name]="'hourglass'"></fa>
+    </div>
+    <div class="growl-content">
+      <div class="growl-title">
+        EOS contract deployed successfully.
+      </div>
+    </div>
+  </div>
+
   <div class="success growl" *ngIf="isSuccessful">
     <div class="growl-icon">
       <fa class="state-icon" [name]="'check'"></fa>
     </div>
     <div class="growl-content">
       <div class="growl-title">
-        EOS Token create successfully.
+        EOS token created successfully.
       </div>
-      <div class="growl-message">
-        ownderAddress: {{ownerAddress}} <br/>
-        ownerKey: {{ownerKey}} <br/>
-        activeAddress: {{activeAddress}} <br/>
-        activeKey: {{activeKey}} <br/>
-        <fa [name]="'copy'" (click)="copyHash()"></fa>
+    </div>
+  </div>
+
+  <div class="failed growl" *ngIf="isFailed">
+    <div class="growl-icon">
+      <fa class="state-icon" [name]="'times'"></fa>
+    </div>
+    <div class="growl-content">
+      <div class="growl-title">
+        EOS token creation failed.
       </div>
     </div>
   </div>
@@ -50,6 +83,16 @@
       [maxLength]="6"
       [upperCase]="true"
       [control]="eosCreateForm.controls['symbol']">
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <wa-input
+      [id]="'decimals'"
+      [name]="'decimals'"
+      [label]="'Precisions'"
+      [type]="'number'"
+      [control]="eosCreateForm.controls['decimals']" >
     </wa-input>
   </div>
 

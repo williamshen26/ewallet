@@ -16,6 +16,8 @@ import {TokenComponent} from './token/token-component';
 import {ContactListComponent} from './contact-list/contact-list-component';
 import {QrDialogComponent} from './qr-dialog/qr-dialog-component'
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
+import {EosContractComponent} from './eos-contract/eos-contract.component'
+import {EosTokenComponent} from './eos-token/eos-token.component'
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
     TokenComponent,
     ContactListComponent,
     QrDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    EosContractComponent,
+    EosTokenComponent
   ],
   imports: [
     FormsModule,
@@ -51,7 +55,9 @@ import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
     TokenComponent,
     ContactListComponent,
     QrDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    EosContractComponent,
+    EosTokenComponent
   ],
   providers: [
     QRScanner,

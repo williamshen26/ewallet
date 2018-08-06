@@ -72,7 +72,7 @@ export class WalletPage {
   }
 
   protected readyRemoveToken(tokenId: string) {
-    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    let dialogRef = this.dialog['open'](ConfirmDialogComponent, {
       width: '500px',
       data: {
         message: 'Are you sure you want to remove this token?'
@@ -108,7 +108,7 @@ export class WalletPage {
   }
 
   protected readyRemoveWallet() {
-    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    let dialogRef = this.dialog['open'](ConfirmDialogComponent, {
       width: '500px',
       data: {
         message: 'Are you sure you want to remove this wallet?'

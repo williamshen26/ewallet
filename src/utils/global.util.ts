@@ -15,8 +15,8 @@ export const contractGenerateApi = 'http://ec2-52-33-149-46.us-west-2.compute.am
 /*************************EOS**********************************/
 // export const eosNetwork = 'https://api1.eosdublin.io';
 // export const eosNetwork = 'http://peer1.eos9cat.com:8888';
-// export const eosNetwork = 'http://jungle.eos9cat.com:8888';
-export const eosNetwork = 'http://jungle.cryptolions.io:38888';
+export const eosNetwork = 'http://jungle.eos9cat.com:8888';
+// export const eosNetwork = 'http://jungle.cryptolions.io:38888';
 export const eosChainId = '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca';
 
 // Default configuration (additional options below)
