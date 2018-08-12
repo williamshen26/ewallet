@@ -1,0 +1,26 @@
+<mat-accordion>
+  <mat-expansion-panel (opened)="onOpen()">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <fa [name]="'handshake-o'"></fa>
+        {{account}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="form-item">
+      <label>CPU </label> {{cpuUsed | unit : 'MicrosecondOptimize'}} / {{cpuMax | unit : 'MicrosecondOptimize'}}
+    </div>
+    <div class="form-item">
+      <label>Bandwidth </label> {{bwUsed | unit : 'ByteOptimize'}}  / {{bwMax | unit : 'ByteOptimize'}}
+    </div>
+    <div class="form-item">
+      <label>RAM </label> {{ramUsed | unit : 'ByteOptimize'}} / {{ramMax | unit : 'ByteOptimize'}}
+    </div>
+
+    <div class="form-item" *ngFor="let action of abi.actions">
+
+      <button mat-raised-button class="wallet-button" color="primary" (click)="doAction(action)">{{action.name}}</button>
+    </div>
+
+  </mat-expansion-panel>
+</mat-accordion>

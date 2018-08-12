@@ -14,9 +14,8 @@ import {Platform} from 'ionic-angular';
 import {AddTokenPage} from "../add-token/add-token";
 import {SendEthPage} from "../send-eth/send-eth";
 import {ContractTemplatesPage} from "../contract-templates/contract-templates";
-// import solc from 'solc/index.js';
 
-export const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
+const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
 
 @Component({
   selector: 'wallet',
@@ -73,7 +72,7 @@ export class WalletPage {
   }
 
   protected readyRemoveToken(tokenId: string) {
-    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    let dialogRef = this.dialog['open'](ConfirmDialogComponent, {
       width: '500px',
       data: {
         message: 'Are you sure you want to remove this token?'
@@ -109,7 +108,7 @@ export class WalletPage {
   }
 
   protected readyRemoveWallet() {
-    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    let dialogRef = this.dialog['open'](ConfirmDialogComponent, {
       width: '500px',
       data: {
         message: 'Are you sure you want to remove this wallet?'

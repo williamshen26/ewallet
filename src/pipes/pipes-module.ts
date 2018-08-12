@@ -1,12 +1,15 @@
 import {NgModule} from '@angular/core';
 import {AddressToContactPipe} from './address-to-contact.pipe';
+import {UnitPipe} from './unit-convert.pipe';
 
 @NgModule({
   declarations: [
-    AddressToContactPipe
+    AddressToContactPipe,
+    UnitPipe
   ],
   exports: [
-    AddressToContactPipe
+    AddressToContactPipe,
+    UnitPipe
   ]
 })
 export class PipeModule {

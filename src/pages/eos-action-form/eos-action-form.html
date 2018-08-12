@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{actionName}}</ion-title>
+  </ion-navbar>
+
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
+</ion-header>
+<ion-content padding>
+  <div class="success growl" *ngIf="isSuccessful">
+    <div class="growl-icon">
+      <fa class="state-icon" [name]="'check'"></fa>
+    </div>
+    <div class="growl-content">
+      <div class="growl-title">
+        Action completed successfully.
+      </div>
+      <div class="growl-message">
+        {{receipt}}
+        <fa [name]="'copy'" (click)="copyHash()"></fa>
+      </div>
+    </div>
+  </div>
+
+  <div class="failed growl" *ngIf="isFailed">
+    <div class="growl-icon">
+      <fa class="state-icon" [name]="'times'"></fa>
+    </div>
+    <div class="growl-content">
+      <div class="growl-title">
+        Action failed.
+      </div>
+      <div>
+        {{receipt}}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-item" *ngFor="let field of fields">
+    <wa-input
+      [id]="field.name"
+      [name]="field.name"
+      [label]="field.name"
+      [type]="field.inputType"
+      [upperCase]="field.upperCase"
+      [control]="actionForm.controls[field.name]">
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <button mat-raised-button class="wallet-button" color="primary" (click)="readyAction()" *ngIf="actionForm" [disabled]="isLoading || actionForm.invalid" >Next!</button>
+  </div>
+
+</ion-content>

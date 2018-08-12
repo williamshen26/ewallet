@@ -13,7 +13,7 @@ import {HttpClient} from "@angular/common/http";
 import {HttpHeaders} from "@angular/common/http";
 import {ContactGenerate} from "../../models/contract-generate-model";
 
-export const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
+const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
 
 @Component({
   selector: 'contract-form',
@@ -91,13 +91,11 @@ export class ContractFormPage {
       formGroup[item.id] = new FormControl('', validators);
     }
 
-    console.log(formGroup);
-
     return this.fb.group(formGroup);
   }
 
   protected startGenerateContract() {
-    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    let dialogRef = this.dialog['open'](ConfirmDialogComponent, {
       width: '500px',
       data: {
         message: 'Proceed generating contract? A fee of ' + this.template.cost + ' ETH will be applied.'

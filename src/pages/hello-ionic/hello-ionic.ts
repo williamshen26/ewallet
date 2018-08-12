@@ -1,7 +1,7 @@
 import {Component, Output, EventEmitter, NgZone, ViewChild} from '@angular/core';
 import W3 from 'web3';
 import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
-import {Wallet} from '../../models/wallet-model';
+import {Wallet, EosWallet} from '../../models/wallet-model';
 import {WalletUtil} from '../../utils/wallet.util';
 
 import {Events} from 'ionic-angular';
@@ -15,6 +15,11 @@ import {Platform} from 'ionic-angular';
 import {Clipboard} from "@ionic-native/clipboard";
 
 export const web3: W3 = new W3(new W3.providers.HttpProvider(globals.network));
+import Eos from 'eosjs/lib/index.js';
+import ecc from 'eosjs-ecc/lib/index.js';
+
+let config = Object.assign({}, globals.eosConfig);
+let eos = Eos(config);
 
 @Component({
   selector: 'page-hello-ionic',
@@ -26,6 +31,9 @@ export class HelloIonicPage {
 
   private contactForm: FormGroup;
   private _contactModel: Contact = new Contact();
+
+  private eosWalletForm: FormGroup;
+  private _eosWalletModel: EosWallet = new EosWallet();
 
   private contactList: Contact[];
 
@@ -50,11 +58,40 @@ export class HelloIonicPage {
     private clipboard: Clipboard,
     private snackBar: MatSnackBar
   ) {
+
+
     this.buildForm();
     this.retrieveData();
   }
 
-  protected createWallet() {
+  protected createEosWallet() {
+    this.eosWalletForm.controls['address'].setValue(ecc['PrivateKey'](this._eosWalletModel.privateKey).toPublic().toString());
+    this.eosWalletForm.controls['address'].updateValueAndValidity();
+
+    eos.getKeyAccounts(this._eosWalletModel.address).then((account) => {
+      this.zone.run(() => {
+        this.eosWalletForm.controls['account'].setValue(account['account_names'][0]);
+        this.eosWalletForm.controls['account'].updateValueAndValidity();
+      });
+
+      let eosWalletModel: EosWallet = Object.assign({}, this._eosWalletModel);
+
+      this.storageUtil.addEosWallet(eosWalletModel).then(() => {
+        this.event.publish('eos.wallet.created', eosWalletModel);
+
+        this.zone.run(() => {
+          this.walletCreateSuccessful = true;
+          this.createdAddress = this._eosWalletModel.account;
+          this.createdPrivateKey = this._eosWalletModel.privateKey;
+
+          this.eosWalletForm.reset();
+        });
+      })
+    });
+
+  }
+
+  protected createEthWallet() {
     this.walletForm.controls['privateKey'].setValue(this._model.privateKey.startsWith("0x") ? this._model.privateKey : '0x' + this._model.privateKey);
 
     this.walletForm.controls['address'].setValue(web3.eth.accounts.privateKeyToAccount(this._model.privateKey).address);
@@ -63,7 +100,7 @@ export class HelloIonicPage {
     let walletModel: Wallet = Object.assign({}, this._model);
 
     this.storageUtil.addWallet(walletModel).then(() => {
-      this.event.publish('wallet.created', walletModel);
+      this.event.publish('eth.wallet.created', walletModel);
 
       this.zone.run(() => {
         this.walletCreateSuccessful = true;
@@ -76,7 +113,7 @@ export class HelloIonicPage {
     });
   }
 
-  protected generateAccount() {
+  protected generateEthAccount() {
     this.walletForm.controls['privateKey'].setValue(web3.eth.accounts.create().privateKey);
     this.walletForm.controls['privateKey'].updateValueAndValidity();
   }
@@ -97,7 +134,7 @@ export class HelloIonicPage {
   }
 
   protected readyRemoveContact(contactId: string) {
-    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    let dialogRef = this.dialog['open'](ConfirmDialogComponent, {
       width: '500px',
       data: {
         message: 'Are you sure you want to remove this contact?'
@@ -131,7 +168,7 @@ export class HelloIonicPage {
   }
 
   protected readyResetWallet() {
-    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    let dialogRef = this.dialog['open'](ConfirmDialogComponent, {
       width: '500px',
       data: {
         message: 'Are you sure you want to reset the wallet?'
@@ -177,6 +214,12 @@ export class HelloIonicPage {
       this.walletUtil.updatePropertyValue(this._model, data);
     });
 
+    this.eosWalletForm = this.createEosWalletFormGroup();
+
+    this.eosWalletForm.valueChanges.subscribe((data) => {
+      this.walletUtil.updatePropertyValue(this._eosWalletModel, data);
+    });
+
     this.contactForm = this.createContactFormGroup();
 
     this.contactForm.valueChanges.subscribe((data) => {
@@ -189,6 +232,15 @@ export class HelloIonicPage {
       'name': new FormControl(model.name, Validators.required),
       'address': new FormControl(model.address, []),
       'privateKey': new FormControl(model.privateKey, [Validators.required, CryptoValidators.privateKeyIsValid])
+    });
+  }
+
+  private createEosWalletFormGroup(eosModel: EosWallet = new EosWallet()): FormGroup {
+    return this.fb.group({
+      'name': new FormControl(eosModel.name, Validators.required),
+      'account': new FormControl(eosModel.account, []),
+      'address': new FormControl(eosModel.address, []),
+      'privateKey': new FormControl(eosModel.privateKey, [Validators.required, CryptoValidators.eosPrivateKeyIsValid])
     });
   }
 
@@ -211,5 +263,6 @@ export class HelloIonicPage {
         });
       });
   }
+
 
 }

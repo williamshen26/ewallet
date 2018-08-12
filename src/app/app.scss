@@ -36,9 +36,8 @@
 .form-title {
   font-weight: bolder;
   font-size: 16px;
-  border-bottom: #acacac 1px solid;
   padding-bottom: 5px;
-  margin-bottom: 20px;
+  margin: 10px;
 }
 
 .form-section {
@@ -191,6 +190,14 @@ mat-panel-title {
 
 .success {
   background: #5cb85c;
+}
+
+.failed {
+  background: #f33d3d;
+}
+
+.process {
+  background: #f6ebbc;
 }
 
 a {

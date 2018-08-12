@@ -1,0 +1,111 @@
+eos-wallet {
+  .wallet-top-section {
+    display: table;
+    width: 100%;
+    height: 300px;
+    background: url("../assets/imgs/background/milky-300.jpg");
+    background-size: cover;
+  }
+
+  @media (min-width: 375px) {
+    .wallet-top-section {
+      background: url("../assets/imgs/background/milky-450.jpg");
+    }
+  }
+
+  @media (min-width: 525px) {
+    .wallet-top-section {
+      background: url("../assets/imgs/background/milky-600.jpg");
+    }
+  }
+
+  @media (min-width: 675px) {
+    .wallet-top-section {
+      background: url("../assets/imgs/background/milky-750.jpg");
+    }
+  }
+
+  @media (min-width: 825px) {
+    .wallet-top-section {
+      background: url("../assets/imgs/background/milky-900.jpg");
+    }
+  }
+
+  @media (min-width: 975px) {
+    .wallet-top-section {
+      background: url("../assets/imgs/background/milky-1050.jpg");
+    }
+  }
+
+  @media (min-width: 1125px) {
+    .wallet-top-section {
+      background: url("../assets/imgs/background/milky-1200.jpg");
+    }
+  }
+
+  .wallet-info {
+    display:table-cell;
+    text-align: center;
+    vertical-align: middle;
+
+    .wallet-balance {
+      font-size: 24px;
+      color: #ffc107;
+      font-weight: bold;
+      display: block;
+    }
+
+    .wallet-address {
+      font-size: 16px;
+      color: #ffc107;
+      display: inline;
+
+      p {
+        word-break: break-all;
+      }
+    }
+
+    .wallet-data {
+      color: #ffc107;
+      margin: 5px 10px;
+      text-align: left;
+
+      label {
+        text-align: right;
+      }
+    }
+
+    .wallet-control {
+      color: #ffc107;
+      margin-top: 20px;
+
+      a {
+        display: inline-block;
+        margin: 0 10px;
+      }
+
+    }
+  }
+
+
+
+  ion-buttons {
+
+    margin-right: 10px;
+
+    button {
+      background-color: transparent;
+
+      fa {
+        font-size: 18px;
+      }
+    }
+
+    .add-button {
+      color: #2ec95c;
+    }
+
+
+  }
+
+}

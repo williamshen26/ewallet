@@ -3,6 +3,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatExpansionModule, MatListModule, MatMenuModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import { PipeModule } from '../pipes/pipes-module';
 import { IonicApp } from 'ionic-angular';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome'
 
@@ -16,6 +17,8 @@ import {TokenComponent} from './token/token-component';
 import {ContactListComponent} from './contact-list/contact-list-component';
 import {QrDialogComponent} from './qr-dialog/qr-dialog-component'
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
+import {EosContractComponent} from './eos-contract/eos-contract.component'
+import {EosTokenComponent} from './eos-token/eos-token.component'
 
 @NgModule({
   declarations: [
@@ -24,7 +27,9 @@ import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
     TokenComponent,
     ContactListComponent,
     QrDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    EosContractComponent,
+    EosTokenComponent
   ],
   imports: [
     FormsModule,
@@ -38,6 +43,7 @@ import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
     MatListModule,
     MatMenuModule,
     Angular2FontawesomeModule,
+    PipeModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -51,7 +57,9 @@ import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
     TokenComponent,
     ContactListComponent,
     QrDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    EosContractComponent,
+    EosTokenComponent
   ],
   providers: [
     QRScanner,

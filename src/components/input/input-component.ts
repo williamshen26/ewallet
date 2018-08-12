@@ -79,6 +79,14 @@ export class InputComponent {
 
   }
 
+  protected formatInput(event: any) {
+    if (!event || !event.target) { return; }
+
+    if(this.upperCase && event.target.value !== event.target.value.toUpperCase()) {
+      this.control.setValue(event.target.value.toUpperCase());
+    }
+  }
+
   protected getEstimatedGas() {
     this.estimateGas.emit();
   }
@@ -89,7 +97,7 @@ export class InputComponent {
   }
 
   protected showQrOption() {
-    let dialogRef = this.dialog.open(QrDialogComponent, {
+    let dialogRef = this.dialog['open'](QrDialogComponent, {
       width: '500px',
       data: { }
     });

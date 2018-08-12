@@ -5,8 +5,8 @@
          id="{{id}}"
          [name]="name"
          [maxLength]="maxLength ? maxLength : 524288"
-         [ngStyle]="{'text-transform': upperCase ? 'uppercase' : 'none'}"
          [formControl]="control"
+         (input)="formatInput($event)"
   >
   <fa matSuffix class="suffix-icon" [name]="'list-ul'" (click)="showList($event)" *ngIf="isList()"></fa>
   <fa matSuffix class="suffix-icon" [name]="'qrcode'" (click)="showQrOption()" *ngIf="isQr()"></fa>
