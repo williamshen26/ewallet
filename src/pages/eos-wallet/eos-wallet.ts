@@ -13,6 +13,8 @@ import {ConfirmDialogComponent} from "../../components/confirm-dialog/confirm-di
 import {EosContractFormPage} from "../eos-contract-form/eos-contract-form";
 import {EosAddTokenPage} from "../eos-add-token/eos-add-token";
 import {EosToken} from "../../models/token-model";
+import {EosStackResourcesPage} from "../eos-stack-resources/eos-stack-resources";
+import {EosBuySellRamPage} from "../eos-buysell-ram/eos-buysell-ram";
 
 let config = Object.assign({}, globals.eosConfig);
 let eos = Eos(config);
@@ -150,7 +152,40 @@ export class EosWalletPage {
   protected gotoAddToken() {
     this.navCtrl.push(EosAddTokenPage, {
       walletId: this.walletData.id
-    })
+    });
+  }
+
+
+  protected gotoStackResource() {
+    this.navCtrl.push(EosStackResourcesPage, {
+      stack: true,
+      walletAccount: this.walletData.account,
+      walletPrivateKey: this.walletData.privateKey
+    });
+  }
+
+  protected gotoUnstackResource() {
+    this.navCtrl.push(EosStackResourcesPage, {
+      stack: false,
+      walletAccount: this.walletData.account,
+      walletPrivateKey: this.walletData.privateKey
+    });
+  }
+
+  protected gotoBuyRAM() {
+    this.navCtrl.push(EosBuySellRamPage, {
+      buy: true,
+      walletAccount: this.walletData.account,
+      walletPrivateKey: this.walletData.privateKey
+    });
+  }
+
+  protected gotoSellRAM() {
+    this.navCtrl.push(EosBuySellRamPage, {
+      buy: false,
+      walletAccount: this.walletData.account,
+      walletPrivateKey: this.walletData.privateKey
+    });
   }
 
   protected readyRemoveToken(tokenId: string) {

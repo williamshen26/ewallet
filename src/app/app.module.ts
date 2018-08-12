@@ -10,6 +10,8 @@ import { EosWalletPage } from '../pages/eos-wallet/eos-wallet';
 import { EosContractFormPage } from '../pages/eos-contract-form/eos-contract-form';
 import { EosActionFormPage } from '../pages/eos-action-form/eos-action-form';
 import { EosAddTokenPage } from '../pages/eos-add-token/eos-add-token'
+import { EosStackResourcesPage } from '../pages/eos-stack-resources/eos-stack-resources';
+import { EosBuySellRamPage } from '../pages/eos-buysell-ram/eos-buysell-ram';
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { SendTokenPage } from '../pages/send-token/send-token';
 import { ReceiveTokenPage } from '../pages/receive-token/receive-token'
@@ -51,6 +53,8 @@ import {ContractFormPage} from "../pages/contract-form/contract-form";
     EosContractFormPage,
     EosActionFormPage,
     EosAddTokenPage,
+    EosStackResourcesPage,
+    EosBuySellRamPage,
     ContractTemplatesPage,
     ContractFormPage,
     ItemDetailsPage,
@@ -90,6 +94,8 @@ import {ContractFormPage} from "../pages/contract-form/contract-form";
     EosContractFormPage,
     EosActionFormPage,
     EosAddTokenPage,
+    EosBuySellRamPage,
+    EosStackResourcesPage,
     ContractTemplatesPage,
     ContractFormPage,
     ItemDetailsPage,

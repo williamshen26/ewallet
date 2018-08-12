@@ -2,7 +2,7 @@ eos-wallet {
   .wallet-top-section {
     display: table;
     width: 100%;
-    height: 250px;
+    height: 300px;
     background: url("../assets/imgs/background/milky-300.jpg");
     background-size: cover;
   }
@@ -67,12 +67,23 @@ eos-wallet {
 
     .wallet-data {
       color: #ffc107;
-      margin: 5px;
+      margin: 5px 10px;
+      text-align: left;
+
+      label {
+        text-align: right;
+      }
     }
 
     .wallet-control {
       color: #ffc107;
       margin-top: 20px;
+
+      a {
+        display: inline-block;
+        margin: 0 10px;
+      }
+
     }
   }
 

@@ -3,6 +3,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatExpansionModule, MatListModule, MatMenuModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import { PipeModule } from '../pipes/pipes-module';
 import { IonicApp } from 'ionic-angular';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome'
 
@@ -42,6 +43,7 @@ import {EosTokenComponent} from './eos-token/eos-token.component'
     MatListModule,
     MatMenuModule,
     Angular2FontawesomeModule,
+    PipeModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

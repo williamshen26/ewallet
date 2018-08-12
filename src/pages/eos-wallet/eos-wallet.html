@@ -20,7 +20,14 @@
   <button mat-menu-item (click)="gotoAddToken()">Add Token</button>
 </mat-menu>
 <mat-menu #ellipsisMenu="matMenu">
+  <button mat-menu-item (click)="gotoStackResource()">Stack Resource</button>
+  <button mat-menu-item (click)="gotoUnstackResource()">Unstack Resource</button>
+  <button mat-menu-item (click)="gotoBuyRAM()">Buy RAM</button>
+  <button mat-menu-item (click)="gotoSellRAM()">Sell RAM</button>
   <button mat-menu-item (click)="readyRemoveWallet()">Remove Wallet</button>
+</mat-menu>
+<mat-menu #sysMenu="matMenu">
+
 </mat-menu>
 
 <ion-content no-padding>
@@ -31,18 +38,25 @@
         <wa-data [data]="walletBalance" [status]="walletBalanceStatus"></wa-data>
         <fa class="refresh-button" [name]="'refresh'" (click)="getBalance()"></fa>
       </div>
+
+
+
       <div class="wallet-address">
         <p>{{walletData.account}}</p>
       </div>
+
       <div class="wallet-data">
-        <label>CPU </label> {{cpuUsed}} ms / {{cpuMax}} ms
+        <label>CPU </label> {{cpuUsed | unit : 'MicrosecondOptimize'}} / {{cpuMax | unit : 'MicrosecondOptimize'}}
       </div>
+
       <div class="wallet-data">
-        <label>Bandwidth </label> {{bwUsed}} KiB / {{bwMax}} KiB
+        <label>Bandwidth </label> {{bwUsed | unit : 'ByteOptimize'}}  / {{bwMax | unit : 'ByteOptimize'}}
       </div>
+
       <div class="wallet-data">
-        <label>RAM </label> {{ramUsed}} KiB / {{ramMax}} KiB
+        <label>RAM </label> {{ramUsed | unit : 'ByteOptimize'}} / {{ramMax | unit : 'ByteOptimize'}}
       </div>
+
       <div class="wallet-control">
         <a href="#" (click)="gotoSendEos()">
           <fa [name]="'arrow-up'"></fa> Send
@@ -56,6 +70,9 @@
   </div>
 
 
+  <div class="form-title" *ngIf="walletData.tokens.length > 0">
+    Tokens
+  </div>
   <div *ngFor="let token of walletData.tokens">
     <wa-eos-token
       [tokenId]="token.id"
@@ -67,6 +84,9 @@
     ></wa-eos-token>
   </div>
 
+  <div class="form-title" *ngIf="walletData.contracts.length > 0">
+    Contracts
+  </div>
   <div *ngFor="let contract of walletData.contracts">
     <wa-eos-contract
       [contractId]="contract.id"

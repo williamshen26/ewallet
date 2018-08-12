@@ -72,11 +72,11 @@ export class EosContractFormPage {
     return this.fb.group({
       'code': new FormControl(model.code, [Validators.required, CryptoValidators.eosAccountlIsValid]),
       'symbol': new FormControl(model.symbol, Validators.required),
-      'decimals': new FormControl(model.decimals, [Validators.required, CryptoValidators.eosDecimalNotTooLarge]),
+      'decimals': new FormControl(4, [Validators.required, CryptoValidators.eosDecimalNotTooLarge]),
       'maxSupply': new FormControl(model.maxSupply, Validators.required),
-      'eosForRAM': new FormControl(model.eosForRAM, Validators.required),
-      'eosForCPU': new FormControl(model.eosForCPU, Validators.required),
-      'eosForBW': new FormControl(model.eosForBW, Validators.required)
+      'eosForRAM': new FormControl(100, Validators.required),
+      'eosForCPU': new FormControl(10, Validators.required),
+      'eosForBW': new FormControl(10, Validators.required)
     });
   }
 
@@ -196,7 +196,7 @@ export class EosContractFormPage {
           setTimeout(()=> {
             eos.contract(this._model.code).then(myaccount => myaccount.create({
               issuer: this.account,
-              maximum_supply: parseFloat(this.walletUtil.toFixed(this._model.maxSupply)).toFixed(this._model.decimals) + ' ' + this._model.symbol
+              maximum_supply: parseFloat(this.walletUtil.toFixed(this._model.maxSupply)).toFixed(this._model.decimals) + ' ' + this._model.symbol 
             }, {authorization: this._model.code}).then(() => {
               console.log('Token Created');
               this.token.code = this._model.code;

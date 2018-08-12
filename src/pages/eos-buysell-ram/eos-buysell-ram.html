@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{title}}</ion-title>
+  </ion-navbar>
+
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div class="success growl" *ngIf="isSuccessful">
+    <div class="growl-icon">
+      <fa class="state-icon" [name]="'check'"></fa>
+    </div>
+    <div class="growl-content">
+      <div class="growl-title">
+        {{successMessage}}
+      </div>
+      <div class="growl-message">
+        {{receipt}}
+      </div>
+    </div>
+  </div>
+
+  <div class="failed growl" *ngIf="isFailed">
+    <div class="growl-icon">
+      <fa class="state-icon" [name]="'times'"></fa>
+    </div>
+    <div class="growl-content">
+      <div class="growl-title">
+        {{failMessage}}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-item" *ngIf="buy">
+    <wa-input
+      [id]="'buyQuantityInEos'"
+      [name]="'buyQuantityInEos'"
+      [label]="'EOS Amount'"
+      [type]="['number']"
+      [control]="ramForm.controls['buyQuantityInEos']">
+    </wa-input>
+  </div>
+
+  <div class="form-item" *ngIf="!buy">
+    <wa-input
+      [id]="'sellQuantityInByte'"
+      [name]="'sellQuantityInByte'"
+      [label]="'Byte Amount (1 KiB = 1024 Bytes)'"
+      [type]="['number']"
+      [control]="ramForm.controls['sellQuantityInByte']">
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <button mat-raised-button class="wallet-button" color="primary" (click)="readyBuyRam()" [disabled]="ramForm.invalid || isLoading">{{title}}</button>
+  </div>
+</ion-content>

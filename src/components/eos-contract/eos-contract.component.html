@@ -8,13 +8,13 @@
     </mat-expansion-panel-header>
 
     <div class="form-item">
-      <label>CPU </label> {{cpuUsed}} ms / {{cpuMax}} ms
+      <label>CPU </label> {{cpuUsed | unit : 'MicrosecondOptimize'}} / {{cpuMax | unit : 'MicrosecondOptimize'}}
     </div>
     <div class="form-item">
-      <label>Bandwidth </label> {{bwUsed}} KiB / {{bwMax}} KiB
+      <label>Bandwidth </label> {{bwUsed | unit : 'ByteOptimize'}}  / {{bwMax | unit : 'ByteOptimize'}}
     </div>
     <div class="form-item">
-      <label>RAM </label> {{ramUsed}} KiB / {{ramMax}} KiB
+      <label>RAM </label> {{ramUsed | unit : 'ByteOptimize'}} / {{ramMax | unit : 'ByteOptimize'}}
     </div>
 
     <div class="form-item" *ngFor="let action of abi.actions">

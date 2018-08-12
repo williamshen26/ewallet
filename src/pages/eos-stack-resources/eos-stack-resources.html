@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{title}}</ion-title>
+  </ion-navbar>
+
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div class="success growl" *ngIf="isSuccessful">
+    <div class="growl-icon">
+      <fa class="state-icon" [name]="'check'"></fa>
+    </div>
+    <div class="growl-content">
+      <div class="growl-title">
+        {{successMessage}}
+      </div>
+      <div class="growl-message">
+        {{receipt}}
+      </div>
+    </div>
+  </div>
+
+  <div class="failed growl" *ngIf="isFailed">
+    <div class="growl-icon">
+      <fa class="state-icon" [name]="'times'"></fa>
+    </div>
+    <div class="growl-content">
+      <div class="growl-title">
+        {{failMessage}}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-item">
+    <wa-input
+      [id]="'stakeCpuQuantity'"
+      [name]="'stakeCpuQuantity'"
+      [label]="'CPU Quantity'"
+      [type]="['number']"
+      [control]="stackForm.controls['stakeCpuQuantity']">
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <wa-input
+      [id]="'stakeNetQuantity'"
+      [name]="'stakeNetQuantity'"
+      [label]="'BW Quantity'"
+      [type]="['number']"
+      [control]="stackForm.controls['stakeNetQuantity']">
+    </wa-input>
+  </div>
+
+  <div class="form-item">
+    <button mat-raised-button class="wallet-button" color="primary" (click)="readyStackResources()" [disabled]="!formValid() || isLoading">{{title}}</button>
+  </div>
+</ion-content>
