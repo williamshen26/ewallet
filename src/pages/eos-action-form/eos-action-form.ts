@@ -104,46 +104,45 @@ export class EosActionFormPage {
     this.isLoading = true;
     this.actionForm.disable();
 
-    console.log(this._model);
+    eos.contract(this.account).then(myaccount => {
+      myaccount[this.actionName](this._model, {authorization: this.account}).then(() => {
+        this.zone.run(() => {
+          this.isLoading = false;
+          this.actionForm.enable();
+          this.isSuccessful = true;
+        });
+      }).catch((err) => {
+        console.log('error', err);
+        if (JSON.parse(err)['error']['code'] === 3090004) {
 
-    eos.contract(this.account)
-      .then(myaccount => myaccount[this.actionName](this._model, {authorization: this.account})
-        .then(() => {
-          this.zone.run(() => {
-            this.isLoading = false;
-            this.actionForm.enable();
-            this.isSuccessful = true;
-          });
-        })
-        .catch((err) => {
-          if (JSON.parse(err)['error']['code'] === 3090004) {
-
-            eos.contract(this.account)
-              .then(myaccount => myaccount[this.actionName](this._model, {authorization: this.walletAccount})
-                .then((result) => {
-                  this.zone.run(() => {
-                    this.isLoading = false;
-                    this.actionForm.enable();
-                    this.receipt = result['transaction_id'];
-                    this.isSuccessful = true;
-                  });
-                })
-                .catch((err) => {
+          eos.contract(this.account)
+            .then(myaccount => myaccount[this.actionName](this._model, {authorization: this.walletAccount})
+              .then((result) => {
+                this.zone.run(() => {
                   this.isLoading = false;
                   this.actionForm.enable();
-                  this.receipt = (JSON.parse(err)['error']['details'].length > 0) ? JSON.parse(err)['error']['details'][0]['message'] : JSON.parse(err)['error']['what'];
-                  this.isFailed = true;
-                })
-              );
+                  this.receipt = result['transaction_id'];
+                  this.isSuccessful = true;
+                });
+              })
+              .catch((err) => {
+                this.isLoading = false;
+                this.actionForm.enable();
+                this.receipt = (JSON.parse(err)['error']['details'].length > 0) ? JSON.parse(err)['error']['details'][0]['message'] : JSON.parse(err)['error']['what'];
+                this.isFailed = true;
+              })
+            );
 
-          } else {
-            this.isLoading = false;
-            this.actionForm.enable();
-            this.receipt = (JSON.parse(err)['error']['details'].length > 0) ? JSON.parse(err)['error']['details'][0]['message'] : JSON.parse(err)['error']['what'];
-            this.isFailed = true;
-          }
-        })
-      );
+        } else {
+          this.isLoading = false;
+          this.actionForm.enable();
+          this.receipt = (JSON.parse(err)['error']['details'].length > 0) ? JSON.parse(err)['error']['details'][0]['message'] : JSON.parse(err)['error']['what'];
+          this.isFailed = true;
+        }
+      })
+    }).catch((err) => {
+      console.log(err);
+    });
   }
 
   constructor(private navParams: NavParams,
@@ -162,7 +161,7 @@ export class EosActionFormPage {
     this.buildForm();
 
     config.keyProvider = this.keys;
-
+    eos = Eos(config);
   }
 
 }

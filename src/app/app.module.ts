@@ -29,6 +29,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { Clipboard } from '@ionic-native/clipboard';
 import { WalletUtil } from '../utils/wallet.util';
 import { StorageUtil } from '../utils/storage.util';
+import { SecureStorage } from '@ionic-native/secure-storage';
 
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome'
 
@@ -106,6 +107,7 @@ import {ContractFormPage} from "../pages/contract-form/contract-form";
     SplashScreen,
     WalletUtil,
     StorageUtil,
+    SecureStorage,
     Clipboard,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

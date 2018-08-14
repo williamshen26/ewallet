@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { SecureStorage, SecureStorageObject } from '@ionic-native/secure-storage';
 import uuid from 'uuid/index.js'
 import {Wallet, EosWallet} from '../models/wallet-model';
 import {Contact} from '../models/contact-model';
@@ -9,7 +10,7 @@ import {EosContract} from "../models/eos-contract-model";
 @Injectable()
 export class StorageUtil {
 
-  constructor (private storage: Storage) {
+  constructor (private storage: Storage, private secureStorage: SecureStorage) {
 
   }
 
@@ -33,6 +34,11 @@ export class StorageUtil {
       contacts = [];
       this.storage.set('contacts', contacts);
     });
+
+    this.secureStorage.create('key_store')
+      .then((keyStorage) => {
+        keyStorage.clear();
+      })
   }
 
   public getWallets(): Promise<Wallet[]> {
@@ -85,14 +91,20 @@ export class StorageUtil {
 
   public addWallet(wallet: Wallet): Promise<any> {
     return new Promise((resolve, reject) => {
+      wallet.id = uuid();
+
+      let privateKey = wallet.privateKey;
+      wallet.privateKey = null;
 
       this.storage.get('wallets').then((wallets: Wallet[]) => {
-        wallet.id = uuid();
         wallets.push(wallet);
         this.storage.set('wallets', wallets);
         resolve();
       });
 
+      this.secureStorage.create('key_storage').then((keyStorage) => {
+        keyStorage.set(wallet.id + '_' + wallet.address, privateKey);
+      });
     });
   }
 
@@ -101,8 +113,13 @@ export class StorageUtil {
       this.storage.get('wallets').then((wallets: Wallet[]) => {
         for (let wallet of wallets) {
           if (wallet.id === walletId) {
-            resolve(wallet);
+            this.secureStorage.create('key_storage').then((keyStorage) => {
+              keyStorage.get(wallet.id + '_' + wallet.address).then((key) => {
+                wallet.privateKey = key;
+              });
+            });
 
+            resolve(wallet);
             break;
           }
         }
@@ -121,7 +138,11 @@ export class StorageUtil {
 
             this.storage.set('wallets', wallets);
 
-            resolve(wallet);
+            this.secureStorage.create('key_storage')
+              .then((keyStorage) => {
+                keyStorage.remove(wallet.id + '_' + wallet.address);
+                resolve(wallet);
+              });
 
             break;
           }
@@ -133,12 +154,20 @@ export class StorageUtil {
 
   public addEosWallet(wallet: EosWallet): Promise<any> {
     return new Promise((resolve, reject) => {
+      wallet.id = uuid();
+
+      let privateKey = wallet.privateKey;
+      wallet.privateKey = null;
 
       this.storage.get('eosWallets').then((wallets: EosWallet[]) => {
-        wallet.id = uuid();
         wallets.push(wallet);
         this.storage.set('eosWallets', wallets);
         resolve();
+      });
+
+      this.secureStorage.create('key_storage').then((keyStorage) => {
+        console.log('add wallet', wallet.id + '_' + wallet.address);
+        keyStorage.set(wallet.id + '_' + wallet.address, privateKey);
       });
 
     });
@@ -149,10 +178,30 @@ export class StorageUtil {
       this.storage.get('eosWallets').then((wallets: EosWallet[]) => {
         for (let wallet of wallets) {
           if (wallet.id === walletId) {
-            resolve(wallet);
+
+            this.secureStorage.create('key_storage').then((keyStorage) => {
+              keyStorage.get(wallet.id + '_' + wallet.address).then((key) => {
+                wallet.privateKey = key;
+              });
+              for (let contract of wallet.contracts) {
+                keyStorage.get(contract.id + '_' + contract.activeAddress).then((key) => {
+                  contract.activeKey = key;
+                });
+                keyStorage.get(contract.id + '_' + contract.ownerAddress).then((key) => {
+                  contract.ownerKey = key;
+                });
+              }
+            });
+
+            setTimeout(()=>{    //<<<---    using ()=> syntax
+              resolve(wallet);
+            }, 1000);
+
+            break;
           }
         }
-        reject();
+
+        // reject();
       });
     });
   }
@@ -167,7 +216,11 @@ export class StorageUtil {
 
             this.storage.set('eosWallets', wallets);
 
-            resolve(wallet);
+            this.secureStorage.create('key_storage')
+              .then((keyStorage) => {
+                keyStorage.remove(wallet.id + '_' + wallet.address);
+                resolve(wallet);
+              });
 
             break;
           }
@@ -323,6 +376,11 @@ export class StorageUtil {
 
   public addEosContractToWallet(contract: EosContract, walletId: string): Promise<EosContract> {
     return new Promise((resolve, reject) => {
+      let ownerKey = contract.ownerKey;
+      contract.ownerKey = null;
+      let activeKey = contract.activeKey;
+      contract.activeKey = null;
+
       let contractInstant: EosContract = Object.assign({}, contract);
 
       contractInstant.id = uuid();
@@ -339,6 +397,12 @@ export class StorageUtil {
 
       });
 
+      this.secureStorage.create('key_storage')
+        .then((keyStorage) => {
+          keyStorage.set(contractInstant.id + '_' + contractInstant.ownerAddress, ownerKey);
+          keyStorage.set(contractInstant.id + '_' + contractInstant.activeAddress, activeKey);
+        });
+
     });
   }
 
@@ -354,7 +418,12 @@ export class StorageUtil {
 
                 this.storage.set('eosWallets', wallets);
 
-                resolve(contract);
+                this.secureStorage.create('key_storage')
+                  .then((keyStorage) => {
+                    keyStorage.remove(contract.id + '_' + contract.ownerAddress);
+                    keyStorage.remove(contract.id + '_' + contract.activeAddress);
+                    resolve(contract);
+                  });
 
                 break;
               }
