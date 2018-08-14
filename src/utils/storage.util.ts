@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { SecureStorage, SecureStorageObject } from '@ionic-native/secure-storage';
 import uuid from 'uuid/index.js'
 import {Wallet, EosWallet} from '../models/wallet-model';
 import {Contact} from '../models/contact-model';
 import {Token, EosToken} from '../models/token-model';
 import {EosContract} from "../models/eos-contract-model";
+import {Platform} from "ionic-angular";
 
 @Injectable()
 export class StorageUtil {
 
-  constructor (private storage: Storage) {
+  constructor (private storage: Storage, private secureStorage: SecureStorage, private platform: Platform) {
 
   }
 
@@ -33,6 +35,12 @@ export class StorageUtil {
       contacts = [];
       this.storage.set('contacts', contacts);
     });
+
+    if(!this.platform.is('core') && !this.platform.is('mobileweb')) {
+      this.secureStorage.create('key_store').then((keyStorage: SecureStorageObject) => {
+        keyStorage.clear();
+      });
+    }
   }
 
   public getWallets(): Promise<Wallet[]> {
@@ -85,13 +93,23 @@ export class StorageUtil {
 
   public addWallet(wallet: Wallet): Promise<any> {
     return new Promise((resolve, reject) => {
+      wallet.id = uuid();
+
+      if(!this.platform.is('core') && !this.platform.is('mobileweb')) {
+        let privateKey = wallet.privateKey;
+        wallet.privateKey = null;
+
+        this.secureStorage.create('key_storage').then((keyStorage: SecureStorageObject) => {
+          keyStorage.set(wallet.id + '_' + wallet.address, privateKey);
+        });
+      }
 
       this.storage.get('wallets').then((wallets: Wallet[]) => {
-        wallet.id = uuid();
         wallets.push(wallet);
         this.storage.set('wallets', wallets);
         resolve();
       });
+
 
     });
   }
@@ -101,8 +119,16 @@ export class StorageUtil {
       this.storage.get('wallets').then((wallets: Wallet[]) => {
         for (let wallet of wallets) {
           if (wallet.id === walletId) {
-            resolve(wallet);
 
+            if(!this.platform.is('core') && !this.platform.is('mobileweb')) {
+              this.secureStorage.create('key_storage').then((keyStorage: SecureStorageObject) => {
+                keyStorage.get(wallet.id + '_' + wallet.address).then((key) => {
+                  wallet.privateKey = key;
+                });
+              });
+            }
+
+            resolve(wallet);
             break;
           }
         }
@@ -121,7 +147,14 @@ export class StorageUtil {
 
             this.storage.set('wallets', wallets);
 
-            resolve(wallet);
+            if(!this.platform.is('core') && !this.platform.is('mobileweb')) {
+              this.secureStorage.create('key_storage').then((keyStorage: SecureStorageObject) => {
+                keyStorage.remove(wallet.id + '_' + wallet.address);
+                resolve(wallet);
+              });
+            } else {
+              resolve(wallet);
+            }
 
             break;
           }
@@ -133,9 +166,19 @@ export class StorageUtil {
 
   public addEosWallet(wallet: EosWallet): Promise<any> {
     return new Promise((resolve, reject) => {
+      wallet.id = uuid();
+
+      if(!this.platform.is('core') && !this.platform.is('mobileweb')) {
+        let privateKey = wallet.privateKey;
+        wallet.privateKey = null;
+
+        this.secureStorage.create('key_storage').then((keyStorage: SecureStorageObject) => {
+          console.log('add wallet', wallet.id + '_' + wallet.address);
+          keyStorage.set(wallet.id + '_' + wallet.address, privateKey);
+        });
+      }
 
       this.storage.get('eosWallets').then((wallets: EosWallet[]) => {
-        wallet.id = uuid();
         wallets.push(wallet);
         this.storage.set('eosWallets', wallets);
         resolve();
@@ -146,13 +189,53 @@ export class StorageUtil {
 
   public getEosWallet(walletId: string): Promise<EosWallet> {
     return new Promise((resolve, reject) => {
+      let found: boolean;
+      let promiseLeft: number = 0;
       this.storage.get('eosWallets').then((wallets: EosWallet[]) => {
         for (let wallet of wallets) {
           if (wallet.id === walletId) {
-            resolve(wallet);
+
+            if(!this.platform.is('core') && !this.platform.is('mobileweb')) {
+              this.secureStorage.create('key_storage').then((keyStorage: SecureStorageObject) => {
+                promiseLeft++;
+                keyStorage.get(wallet.id + '_' + wallet.address).then((key) => {
+                  wallet.privateKey = key;
+                  promiseLeft--;
+                  if (promiseLeft === 0) {
+                    resolve(wallet);
+                  }
+                });
+                for (let contract of wallet.contracts) {
+                  promiseLeft++;
+                  keyStorage.get(contract.id + '_' + contract.activeAddress).then((key) => {
+                    promiseLeft--;
+                    contract.activeKey = key;
+                    if (promiseLeft === 0) {
+                      resolve(wallet);
+                    }
+                  });
+                  promiseLeft++;
+                  keyStorage.get(contract.id + '_' + contract.ownerAddress).then((key) => {
+                    promiseLeft--;
+                    contract.ownerKey = key;
+                    if (promiseLeft === 0) {
+                      resolve(wallet);
+                    }
+                  });
+                }
+              });
+            } else {
+              resolve(wallet);
+            }
+
+            found = true;
+            break;
           }
         }
-        reject();
+
+        if (!found) {
+          reject();
+        }
       });
     });
   }
@@ -167,7 +250,14 @@ export class StorageUtil {
 
             this.storage.set('eosWallets', wallets);
 
-            resolve(wallet);
+            if(!this.platform.is('core') && !this.platform.is('mobileweb')) {
+              this.secureStorage.create('key_storage').then((keyStorage: SecureStorageObject) => {
+                keyStorage.remove(wallet.id + '_' + wallet.address);
+                resolve(wallet);
+              });
+            } else {
+              resolve(wallet);
+            }
 
             break;
           }
@@ -327,6 +417,18 @@ export class StorageUtil {
 
       contractInstant.id = uuid();
 
+      if(!this.platform.is('core') && !this.platform.is('mobileweb')) {
+        let ownerKey = contract.ownerKey;
+        contractInstant.ownerKey = null;
+        let activeKey = contract.activeKey;
+        contractInstant.activeKey = null;
+
+        this.secureStorage.create('key_storage').then((keyStorage: SecureStorageObject) => {
+          keyStorage.set(contractInstant.id + '_' + contractInstant.ownerAddress, ownerKey);
+          keyStorage.set(contractInstant.id + '_' + contractInstant.activeAddress, activeKey);
+        });
+      }
+
       this.storage.get('eosWallets').then((wallets: EosWallet[]) => {
         for (let wallet of wallets) {
           if (wallet.id === walletId) {
@@ -354,7 +456,15 @@ export class StorageUtil {
 
                 this.storage.set('eosWallets', wallets);
 
-                resolve(contract);
+                if(!this.platform.is('core') && !this.platform.is('mobileweb')) {
+                  this.secureStorage.create('key_storage').then((keyStorage: SecureStorageObject) => {
+                    keyStorage.remove(contract.id + '_' + contract.ownerAddress);
+                    keyStorage.remove(contract.id + '_' + contract.activeAddress);
+                    resolve(contract);
+                  });
+                } else {
+                  resolve(contract);
+                }
 
                 break;
               }
