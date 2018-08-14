@@ -134,7 +134,6 @@ export class SendEosPage {
     this.buildForm();
 
     config.keyProvider.push(this.privateKey);
-    // eos = Eos(config);
 
   }
 

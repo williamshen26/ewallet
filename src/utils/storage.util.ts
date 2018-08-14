@@ -175,33 +175,49 @@ export class StorageUtil {
 
   public getEosWallet(walletId: string): Promise<EosWallet> {
     return new Promise((resolve, reject) => {
+      let found: boolean;
+      let promiseLeft: number = 0;
       this.storage.get('eosWallets').then((wallets: EosWallet[]) => {
         for (let wallet of wallets) {
           if (wallet.id === walletId) {
 
             this.secureStorage.create('key_storage').then((keyStorage) => {
+              promiseLeft++;
               keyStorage.get(wallet.id + '_' + wallet.address).then((key) => {
                 wallet.privateKey = key;
+                promiseLeft--;
+                if (promiseLeft === 0) {
+                  resolve(wallet);
+                }
               });
               for (let contract of wallet.contracts) {
+                promiseLeft++;
                 keyStorage.get(contract.id + '_' + contract.activeAddress).then((key) => {
+                  promiseLeft--;
                   contract.activeKey = key;
+                  if (promiseLeft === 0) {
+                    resolve(wallet);
+                  }
                 });
+                promiseLeft++;
                 keyStorage.get(contract.id + '_' + contract.ownerAddress).then((key) => {
+                  promiseLeft--;
                   contract.ownerKey = key;
+                  if (promiseLeft === 0) {
+                    resolve(wallet);
+                  }
                 });
               }
             });
 
-            setTimeout(()=>{    //<<<---    using ()=> syntax
-              resolve(wallet);
-            }, 1000);
-
+            found = true;
             break;
           }
         }
 
-        // reject();
+        if (!found) {
+          reject();
+        }
       });
     });
   }

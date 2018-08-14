@@ -161,7 +161,6 @@ export class EosActionFormPage {
     this.buildForm();
 
     config.keyProvider = this.keys;
-    eos = Eos(config);
   }
 
 }
