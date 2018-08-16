@@ -13,6 +13,7 @@ import { StorageUtil } from "../utils/storage.util";
 
 import * as globals from '../utils/global.util';
 import {EosWalletPage} from "../pages/eos-wallet/eos-wallet";
+import {LockScreenComponent} from "ionic-simple-lockscreen";
 
 
 @Component({
@@ -113,8 +114,42 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+      if (this.nav.getActive().name !== 'LockScreenComponent') {
+        this.showLockScreen(this.menu);
+      }
+
+      this.platform.resume.subscribe((result)=>{//Foreground
+        console.log('resume application');
+        if (this.nav.getActive().name !== 'LockScreenComponent') {
+          this.showLockScreen(this.menu);
+        }
+      });
     });
   }
+
+  showLockScreen(menu: MenuController) {
+    menu.close();
+    menu.enable(false);
+
+    let deregister: Function = this.platform.registerBackButtonAction(() => {},1);
+
+    this.nav.push(LockScreenComponent,{
+      code:'1234',
+      ACDelbuttons:false,
+      passcodeLabel:'Please Enter Passcode',
+      onCorrect:function(){
+        console.log('Input correct!');
+        deregister();
+
+        menu.enable(true);
+      },
+      onWrong:function(attemptNumber){
+        console.log(attemptNumber + ' wrong passcode attempt(s)');
+      }
+    });
+  }
+
 
   openPage(page) {
     // close the menu when clicking a link from the menu

@@ -3,6 +3,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatExpansionModule, MatListModule, MatDialogModule, MatProgressBarModule, MatSnackBarModule, MatMenuModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { LockScreenModule, LockScreenComponent } from 'ionic-simple-lockscreen';
 import { MyApp } from './app.component';
 
 import { WalletPage } from '../pages/wallet/wallet';
@@ -77,12 +78,14 @@ import {ContractFormPage} from "../pages/contract-form/contract-form";
     MatSnackBarModule,
     MatMenuModule,
     Angular2FontawesomeModule,
+    LockScreenModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    LockScreenComponent,
     HelloIonicPage,
     SendTokenPage,
     ReceiveTokenPage,
