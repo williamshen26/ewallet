@@ -13,6 +13,9 @@ import { StorageUtil } from "../utils/storage.util";
 
 import * as globals from '../utils/global.util';
 import {EosWalletPage} from "../pages/eos-wallet/eos-wallet";
+import {LockScreenComponent} from "ionic-simple-lockscreen";
+import {SetupPasswordPage} from "../pages/setup/setup-password/setup-password";
+import {SettingPage} from "../pages/setting/setting";
 
 
 @Component({
@@ -37,10 +40,10 @@ export class MyApp {
     this.initializeApp();
 
 
-
     // set our app's pages
     this.pages = [
-      { title: 'Home', component: HelloIonicPage, data: {}, type: 'home' }
+      { title: 'Home', component: HelloIonicPage, data: {}, type: 'home' },
+      { title: 'Setting', component: SettingPage, data: {}, type: 'setting' }
     ];
 
     this.storageUtil.getWallets().then((wallets: Wallet[]) => {
@@ -113,8 +116,65 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+      this.storageUtil.hasWalletPassword().then((result) => {
+        if (!result) {
+          this.showSetupScreen();
+        } else {
+          this.showLockScreen();
+        }
+      });
+
+
+      this.platform.resume.subscribe((result)=>{//Foreground
+        console.log('resume application');
+        if (this.nav.getActive().name !== 'LockScreenComponent') {
+          this.showLockScreen();
+        }
+      });
     });
   }
+
+  showSetupScreen() {
+    this.menu.close();
+    this.menu.enable(false);
+
+    let deregister: Function = this.platform.registerBackButtonAction(() => {},1);
+
+    let callback = (() => {
+      deregister();
+      this.menu.enable(true);
+    });
+
+    this.nav.push(SetupPasswordPage, {
+      callback: callback
+    });
+  }
+
+  showLockScreen() {
+    this.menu.close();
+    this.menu.enable(false);
+
+    let deregister: Function = this.platform.registerBackButtonAction(() => {},1);
+
+    this.storageUtil.getWalletPassword().then((password) => {
+      this.nav.push(LockScreenComponent,{
+        code:password,
+        ACDelbuttons:false,
+        passcodeLabel:'Please Enter Passcode',
+        onCorrect:() => {
+          console.log('Input correct!');
+          deregister();
+          this.menu.enable(true);
+        },
+        onWrong:(attemptNumber) => {
+          console.log(attemptNumber + ' wrong passcode attempt(s)');
+        }
+      });
+    });
+
+  }
+
 
   openPage(page) {
     // close the menu when clicking a link from the menu

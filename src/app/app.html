@@ -10,6 +10,7 @@
     <ion-list>
       <button ion-item *ngFor="let p of pages" (click)="openPage(p)">
         <fa [name]="'home'" *ngIf="p.type === 'home'"></fa>
+        <fa [name]="'gears'" *ngIf="p.type === 'setting'"></fa>
         <fa [name]="'credit-card'" *ngIf="p.type === 'wallet'"></fa>
         {{p.title}}
       </button>

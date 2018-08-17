@@ -3,6 +3,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatExpansionModule, MatListModule, MatDialogModule, MatProgressBarModule, MatSnackBarModule, MatMenuModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { LockScreenModule, LockScreenComponent } from 'ionic-simple-lockscreen';
 import { MyApp } from './app.component';
 
 import { WalletPage } from '../pages/wallet/wallet';
@@ -38,6 +39,10 @@ import { PipeModule } from '../pipes/pipes-module'
 import {ContractTemplatesPage} from "../pages/contract-templates/contract-templates";
 import {HttpClientModule} from "@angular/common/http";
 import {ContractFormPage} from "../pages/contract-form/contract-form";
+import {SetupPasswordPage} from "../pages/setup/setup-password/setup-password";
+import {WalletPasswordPage} from "../pages/setting/wallet-password/wallet-password";
+import {SettingPage} from "../pages/setting/setting";
+import {LockScreenUtil} from "../utils/lock-screen.util";
 
 @NgModule({
   declarations: [
@@ -59,7 +64,10 @@ import {ContractFormPage} from "../pages/contract-form/contract-form";
     ContractTemplatesPage,
     ContractFormPage,
     ItemDetailsPage,
-    ListPage
+    ListPage,
+    SetupPasswordPage,
+    WalletPasswordPage,
+    SettingPage
   ],
   imports: [
     ComponentsModule,
@@ -77,12 +85,14 @@ import {ContractFormPage} from "../pages/contract-form/contract-form";
     MatSnackBarModule,
     MatMenuModule,
     Angular2FontawesomeModule,
+    LockScreenModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    LockScreenComponent,
     HelloIonicPage,
     SendTokenPage,
     ReceiveTokenPage,
@@ -100,13 +110,18 @@ import {ContractFormPage} from "../pages/contract-form/contract-form";
     ContractTemplatesPage,
     ContractFormPage,
     ItemDetailsPage,
-    ListPage
+    ListPage,
+    SetupPasswordPage,
+    WalletPasswordPage,
+    SettingPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     WalletUtil,
+    LockScreenUtil,
     StorageUtil,
+
     SecureStorage,
     Clipboard,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

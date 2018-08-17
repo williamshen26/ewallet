@@ -65,5 +65,19 @@ export class BasicValidators {
 
   }
 
+  public static passwordValid(control: FormControl) {
+    if (!control || control.value == null) {
+      return;
+    }
+
+    let value: string = control.value.toString();
+    let regex = /^\d{4}$/;
+
+    let valid = regex.test(value);
+
+    return valid ? null : {passwordInvalid: true};
+
+  }
+
 
 }
