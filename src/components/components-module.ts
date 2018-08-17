@@ -19,6 +19,7 @@ import {QrDialogComponent} from './qr-dialog/qr-dialog-component'
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
 import {EosContractComponent} from './eos-contract/eos-contract.component'
 import {EosTokenComponent} from './eos-token/eos-token.component'
+import {PasswordComponent} from "./password/password.component";
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {EosTokenComponent} from './eos-token/eos-token.component'
     QrDialogComponent,
     ConfirmDialogComponent,
     EosContractComponent,
-    EosTokenComponent
+    EosTokenComponent,
+    PasswordComponent
   ],
   imports: [
     FormsModule,
@@ -59,7 +61,8 @@ import {EosTokenComponent} from './eos-token/eos-token.component'
     QrDialogComponent,
     ConfirmDialogComponent,
     EosContractComponent,
-    EosTokenComponent
+    EosTokenComponent,
+    PasswordComponent
   ],
   providers: [
     QRScanner,

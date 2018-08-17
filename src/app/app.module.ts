@@ -39,6 +39,10 @@ import { PipeModule } from '../pipes/pipes-module'
 import {ContractTemplatesPage} from "../pages/contract-templates/contract-templates";
 import {HttpClientModule} from "@angular/common/http";
 import {ContractFormPage} from "../pages/contract-form/contract-form";
+import {SetupPasswordPage} from "../pages/setup/setup-password/setup-password";
+import {WalletPasswordPage} from "../pages/setting/wallet-password/wallet-password";
+import {SettingPage} from "../pages/setting/setting";
+import {LockScreenUtil} from "../utils/lock-screen.util";
 
 @NgModule({
   declarations: [
@@ -60,7 +64,10 @@ import {ContractFormPage} from "../pages/contract-form/contract-form";
     ContractTemplatesPage,
     ContractFormPage,
     ItemDetailsPage,
-    ListPage
+    ListPage,
+    SetupPasswordPage,
+    WalletPasswordPage,
+    SettingPage
   ],
   imports: [
     ComponentsModule,
@@ -103,13 +110,18 @@ import {ContractFormPage} from "../pages/contract-form/contract-form";
     ContractTemplatesPage,
     ContractFormPage,
     ItemDetailsPage,
-    ListPage
+    ListPage,
+    SetupPasswordPage,
+    WalletPasswordPage,
+    SettingPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     WalletUtil,
+    LockScreenUtil,
     StorageUtil,
+
     SecureStorage,
     Clipboard,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

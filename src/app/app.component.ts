@@ -14,6 +14,8 @@ import { StorageUtil } from "../utils/storage.util";
 import * as globals from '../utils/global.util';
 import {EosWalletPage} from "../pages/eos-wallet/eos-wallet";
 import {LockScreenComponent} from "ionic-simple-lockscreen";
+import {SetupPasswordPage} from "../pages/setup/setup-password/setup-password";
+import {SettingPage} from "../pages/setting/setting";
 
 
 @Component({
@@ -38,10 +40,10 @@ export class MyApp {
     this.initializeApp();
 
 
-
     // set our app's pages
     this.pages = [
-      { title: 'Home', component: HelloIonicPage, data: {}, type: 'home' }
+      { title: 'Home', component: HelloIonicPage, data: {}, type: 'home' },
+      { title: 'Setting', component: SettingPage, data: {}, type: 'setting' }
     ];
 
     this.storageUtil.getWallets().then((wallets: Wallet[]) => {
@@ -115,39 +117,62 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      if (this.nav.getActive().name !== 'LockScreenComponent') {
-        this.showLockScreen(this.menu);
-      }
+      this.storageUtil.hasWalletPassword().then((result) => {
+        if (!result) {
+          this.showSetupScreen();
+        } else {
+          this.showLockScreen();
+        }
+      });
+
 
       this.platform.resume.subscribe((result)=>{//Foreground
         console.log('resume application');
         if (this.nav.getActive().name !== 'LockScreenComponent') {
-          this.showLockScreen(this.menu);
+          this.showLockScreen();
         }
       });
     });
   }
 
-  showLockScreen(menu: MenuController) {
-    menu.close();
-    menu.enable(false);
+  showSetupScreen() {
+    this.menu.close();
+    this.menu.enable(false);
 
     let deregister: Function = this.platform.registerBackButtonAction(() => {},1);
 
-    this.nav.push(LockScreenComponent,{
-      code:'1234',
-      ACDelbuttons:false,
-      passcodeLabel:'Please Enter Passcode',
-      onCorrect:function(){
-        console.log('Input correct!');
-        deregister();
-
-        menu.enable(true);
-      },
-      onWrong:function(attemptNumber){
-        console.log(attemptNumber + ' wrong passcode attempt(s)');
-      }
+    let callback = (() => {
+      deregister();
+      this.menu.enable(true);
     });
+
+    this.nav.push(SetupPasswordPage, {
+      callback: callback
+    });
+  }
+
+  showLockScreen() {
+    this.menu.close();
+    this.menu.enable(false);
+
+    let deregister: Function = this.platform.registerBackButtonAction(() => {},1);
+
+    this.storageUtil.getWalletPassword().then((password) => {
+      this.nav.push(LockScreenComponent,{
+        code:password,
+        ACDelbuttons:false,
+        passcodeLabel:'Please Enter Passcode',
+        onCorrect:() => {
+          console.log('Input correct!');
+          deregister();
+          this.menu.enable(true);
+        },
+        onWrong:(attemptNumber) => {
+          console.log(attemptNumber + ' wrong passcode attempt(s)');
+        }
+      });
+    });
+
   }
 
 

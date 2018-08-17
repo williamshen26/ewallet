@@ -43,6 +43,62 @@ export class StorageUtil {
     }
   }
 
+  public hasWalletPassword(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      if(!this.platform.is('core') && !this.platform.is('mobileweb')) {
+        this.secureStorage.create('password_storage').then((passwordStorage: SecureStorageObject) => {
+          passwordStorage.keys().then((keys) => {
+            if (keys.indexOf('wallet_pw') === -1) {
+              resolve(false);
+            } else {
+              resolve(true);
+            }
+          })
+        });
+      } else {
+        this.storage.get('wallet_pw').then((password) => {
+          if (password) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        })
+      }
+    });
+  }
+
+  public setWalletPassword(password: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (!this.platform.is('core') && !this.platform.is('mobileweb')) {
+        this.secureStorage.create('password_storage').then((passwordStorage: SecureStorageObject) => {
+          passwordStorage.set('wallet_pw', password).then(() => {
+            resolve();
+          });
+        });
+      } else {
+        this.storage.set('wallet_pw', password).then(() => {
+          resolve();
+        });
+      }
+    });
+  }
+
+  public getWalletPassword(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (!this.platform.is('core') && !this.platform.is('mobileweb')) {
+        this.secureStorage.create('password_storage').then((passwordStorage: SecureStorageObject) => {
+          passwordStorage.get('wallet_pw').then((password) => {
+            resolve(password);
+          });
+        });
+      } else {
+        this.storage.get('wallet_pw').then((password) => {
+          resolve(password);
+        });
+      }
+    });
+  }
+
   public getWallets(): Promise<Wallet[]> {
     return new Promise((resolve, reject) => {
       this.storage.get('wallets').then((wallets: Wallet[]) => {
